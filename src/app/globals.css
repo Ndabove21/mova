@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   MOVA — tokens de marca
+   Derivados del isologo: un eclipse. Disco negro, borde de luz cálida (oro)
+   del lado derecho, borde frío (halo azul) del izquierdo. Todo el sitio vive
+   de ese contraste: vacío + luz de canto.
+   ========================================================================== */
+
+@theme {
+  /* Vacío */
+  --color-void:       #030305;
+  --color-void-2:     #08080c;
+  --color-void-3:     #101018;
+
+  /* Tinta */
+  --color-ink:        #f4efe8;
+  --color-ink-dim:    rgba(244, 239, 232, 0.70);
+  --color-ink-faint:  rgba(244, 239, 232, 0.56);
+  --color-line:       rgba(244, 239, 232, 0.10);
+  --color-line-soft:  rgba(244, 239, 232, 0.055);
+
+  /* Luz cálida — el canto derecho del eclipse */
+  --color-gold:       #e4b27a;
+  --color-gold-deep:  #a96c2e;
+
+  /* Luz fría — el canto izquierdo */
+  --color-halo:       #a6c6e2;
+  --color-halo-deep:  #46637e;
+
+  --color-steel:      #72808e;
+
+  /* Tipografías (inyectadas por next/font en <html>) */
+  --font-display:   var(--font-jost), "Futura", "Avenir Next", system-ui, sans-serif;
+  --font-editorial: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* Ritmo */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: auto;
+  overflow-x: hidden;
+  /* Jost es angosto: un pelín más de aire mejora la lectura en cuerpo */
+  letter-spacing: 0.005em;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-void);
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Foco visible — obligatorio, nunca lo saquemos */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Saltar al contenido */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 200;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-ink);
+  color: var(--color-void);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: top 0.2s var(--ease-out-expo);
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ==========================================================================
+   Utilidades de marca
+   ========================================================================== */
+
+/* Texto con el degradé metálico del logo: frío → brillo → oro */
+.text-eclipse {
+  background: linear-gradient(
+    100deg,
+    var(--color-halo-deep) 0%,
+    var(--color-halo) 16%,
+    #fffaf2 42%,
+    var(--color-gold) 68%,
+    var(--color-gold-deep) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hairline: separador de 1px que respira */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-line) 12%,
+    var(--color-line) 88%,
+    transparent
+  );
+}
+
+/* Halo cálido difuso de fondo */
+.glow-gold {
+  background: radial-gradient(
+    closest-side,
+    rgba(228, 178, 122, 0.22),
+    rgba(228, 178, 122, 0.06) 55%,
+    transparent 100%
+  );
+}
+.glow-halo {
+  background: radial-gradient(
+    closest-side,
+    rgba(166, 198, 226, 0.16),
+    rgba(166, 198, 226, 0.04) 55%,
+    transparent 100%
+  );
+}
+
+/* Grano de película — sutil, encima de todo, sin capturar el mouse */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  animation: grainShift 0.7s steps(2) infinite;
+}
+
+@keyframes grainShift {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(-2%, 1.5%); }
+  100% { transform: translate(1.5%, -1%); }
+}
+
+/* Viñeta: cierra los bordes como un cuadro proyectado */
+.vignette::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 48%,
+    rgba(3, 3, 5, 0.55) 100%
+  );
+}
+
+/* ==========================================================================
+   Animaciones
+   ========================================================================== */
+
+@keyframes scrollHint {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  45%  { transform: scaleY(1); transform-origin: top; }
+  55%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.animate-scroll-hint {
+  animation: scrollHint 2.6s ease-in-out infinite;
+}
+
+@keyframes rimDrift {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-rim {
+  animation: rimDrift 46s linear infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+.animate-breathe {
+  animation: breathe 5s ease-in-out infinite;
+}
+
+/* Reveal al entrar en viewport (lo activa un IntersectionObserver) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease-out-expo),
+    transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ==========================================================================
+   Lenis
+   ========================================================================== */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Respetar prefers-reduced-motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .grain::after {
+    animation: none;
+  }
+}
