@@ -41,6 +41,10 @@ export const es = {
     ctaPrimary: "Ver trabajos",
     ctaSecondary: "Empezar un proyecto",
     scroll: "Scroll",
+    pause: "Pausar",
+    play: "Reproducir",
+    soundOn: "Sonido",
+    soundOff: "Silenciar",
   },
 
   manifesto: {
@@ -135,6 +139,7 @@ export const es = {
 
   footer: {
     tagline: "AI Creative Studio",
+    claim: "Create beyond reality.",
     rights: "Todos los derechos reservados.",
     backToTop: "Volver arriba",
     social: "Seguinos",

@@ -22,6 +22,10 @@ export function Footer({ t, lang }: { t: Dictionary; lang: Locale }) {
             <p className="text-ink-faint mt-5 text-[10px] tracking-[0.46em] uppercase">
               {t.footer.tagline}
             </p>
+            {/* El claim del estudio, tal como aparece en su propio isologo
+                animado. Va en inglés en las dos versiones del sitio: es parte
+                de la marca, no un texto a traducir. */}
+            <p className="text-ink-dim mt-7 text-[1.0625rem]">{t.footer.claim}</p>
           </div>
 
           <nav className="lg:col-span-4" aria-label={t.footer.tagline}>

@@ -43,6 +43,10 @@ export const en: Dictionary = {
     ctaPrimary: "See the work",
     ctaSecondary: "Start a project",
     scroll: "Scroll",
+    pause: "Pause",
+    play: "Play",
+    soundOn: "Sound",
+    soundOff: "Mute",
   },
 
   manifesto: {
@@ -137,6 +141,7 @@ export const en: Dictionary = {
 
   footer: {
     tagline: "AI Creative Studio",
+    claim: "Create beyond reality.",
     rights: "All rights reserved.",
     backToTop: "Back to top",
     social: "Follow",

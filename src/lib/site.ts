@@ -35,11 +35,21 @@ export function isLocale(value: string): value is Locale {
 }
 
 /**
- * Video de fondo del hero. Dejalo en null hasta que haya reel real.
- * Cuando llegue: poné el archivo en public/video/hero.mp4 (mudo, loop,
- * ≤ 1920px, ≤ 6 MB — se precarga en todas las visitas) y apuntá acá.
- *   export const HERO_VIDEO = "/video/hero.mp4";
+ * El video de recepción: lo que se ve dentro del eclipse al entrar y lo que
+ * ocupa la pantalla cuando el obturador se abre.
+ *
+ * ⚠️ HOY HAY UN PLACEHOLDER generado con ffmpeg (luz a la deriva sobre negro,
+ * 16s en loop, 400 KB). NO es material del estudio: está para que el mecanismo
+ * se pueda ver funcionando.
+ *
+ * Para poner el reel real sólo hay que pisar los dos archivos:
+ *   public/video/hero.mp4      mudo, loop, ≤1920px, ≤6 MB (se descarga siempre)
+ *   public/img/hero-poster.jpg mismo encuadre que el primer frame
+ *
+ * Conviene que el reel sea más oscuro que claro y sin texto quemado: encima
+ * van el isologo y, más abajo, el titular.
  */
-export const HERO_VIDEO: string | null = null;
-/** Poster del hero mientras carga el video (public/img/hero-poster.jpg). */
-export const HERO_POSTER: string | null = null;
+export const HERO_VIDEO: string | null = "/video/hero.mp4";
+export const HERO_POSTER: string | null = "/img/hero-poster.jpg";
+/** true mientras el video sea el generado por ffmpeg y no el del cliente. */
+export const HERO_VIDEO_IS_PLACEHOLDER = true;

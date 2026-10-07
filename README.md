@@ -47,6 +47,12 @@ se usa **una sola vez en todo el sitio**: la segunda línea del titular del
 hero. Es el único momento en que una letra no es simplemente tinta sobre
 negro.
 
+### El claim
+
+El isologo animado que mandó el cliente trae una línea que no estaba en el
+brief: **"Create beyond reality."**. Está en el footer, en inglés en las dos
+versiones del sitio — es parte de la marca, no un texto a traducir.
+
 ### El isologo
 
 `src/components/primitives/Wordmark.tsx` es **MOVA redibujado como vector**
@@ -124,18 +130,55 @@ y no en inglés, no compila.
 
 ## Cargar los videos
 
-### Reel de fondo del hero
+### La recepción
 
-1. Dejá el archivo en `public/video/hero.mp4` — mudo, loop, ≤1920px, **≤6 MB**
-   (se descarga en toda visita).
-2. Poné un poster en `public/img/hero-poster.jpg`.
-3. En `src/lib/site.ts`:
-   ```ts
-   export const HERO_VIDEO = "/video/hero.mp4";
-   export const HERO_POSTER = "/img/hero-poster.jpg";
-   ```
+El sitio **abre con el isologo animado a pantalla completa**. Es la primera
+pantalla entera: el video ya trae la marca, el descriptor y el claim, así que
+no hay nada de HTML encima — repetirlo sería decir dos veces lo mismo.
 
-El hero funciona perfecto sin video (queda el eclipse solo). El video es un plus.
+El video queda fijo (`sticky`) durante la primera pantalla y media. La frase
+del estudio entra montada sobre él mientras un velo negro sube con el scroll,
+hasta apagarlo del todo justo cuando arranca el manifiesto: *"todo lo que ves
+empieza en negro"*.
+
+Archivos:
+
+| Ruta | Qué es |
+|---|---|
+| `media/mova-logo-sting-source.mp4` | Master que mandó el cliente (3,6 MB, con audio). No se sirve. |
+| `public/video/hero.webm` | VP9 + Opus, 1,2 MB — el que usan Chrome y Firefox |
+| `public/video/hero.mp4` | H.264 + AAC, 1,7 MB — Safari y el resto |
+| `public/img/hero-poster.jpg` | Lo que se ve mientras carga |
+
+Para cambiarlo, pisá los tres archivos y listo (las rutas viven en
+`src/lib/site.ts`). Comandos usados:
+
+```bash
+ffmpeg -i master.mp4 -c:v libx264 -crf 25 -preset slow -c:a aac -b:a 96k \
+  -movflags +faststart public/video/hero.mp4
+ffmpeg -i master.mp4 -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 \
+  -c:a libopus -b:a 80k public/video/hero.webm
+```
+
+**Presupuesto de peso:** el video se descarga en toda visita. 1,2 MB está bien;
+arriba de ~3 MB conviene recortar la duración antes que bajar la calidad —el
+degradé metálico del logotipo es justo lo que peor comprime—.
+
+Detalles que importan:
+- `object-contain`, no `cover`: el logotipo ocupa casi todo el ancho del cuadro
+  y recortar para llenar la pantalla se comería las letras de los costados.
+  Como el fondo del video y el de la página son el mismo negro, las bandas no
+  se notan.
+- El elemento `<video>` mide exactamente la banda 16:9 y lleva una máscara que
+  funde el canto superior e inferior. Sin eso, en un teléfono vertical el video
+  se ve como una caja pegada sobre el fondo.
+- Arranca **mudo** (lo exigen los navegadores) con botones de **pausa** y
+  **sonido**. El de pausa no es decorativo: WCAG 2.2.2 pide poder detener
+  cualquier contenido en movimiento que arranque solo y dure más de 5s.
+- Se pausa solo cuando sale de pantalla, y no autoarranca con
+  `prefers-reduced-motion`.
+
+El hero funciona sin video: poné `HERO_VIDEO = null` y queda la frase sola.
 
 ### Portfolio
 
@@ -188,7 +231,7 @@ usuario a WhatsApp. Configurar Resend antes de publicar.
       (WhatsApp, mail, Instagram, dominio).
 - [ ] **Resend** configurado y probado con un envío real.
 - [ ] **Videos del portfolio** cargados (hoy son 6 slots con `placeholder: true`).
-- [ ] **Reel del hero** si se decide usarlo.
+- [ ] **Reel real** si además del isologo animado quieren mostrar trabajo en la recepción.
 - [ ] **Logo original** en vectorial, si existe.
 - [ ] `SITE_URL` apuntando al dominio definitivo (afecta canonical, hreflang, OG y sitemap).
 
@@ -197,7 +240,8 @@ usuario a WhatsApp. Configurar Resend antes de publicar.
 ## Calidad verificada
 
 - Build de producción limpio, TypeScript estricto sin errores.
-- Peso de la home: ~247 KB comprimido (163 KB de JS, 46 KB de fuentes).
+- Peso de la home: ~1,5 MB comprimido, de los cuales 1,2 MB son el video de
+  recepción. Sin el video: ~250 KB (163 KB de JS, 46 KB de fuentes).
 - **axe-core: 0 violaciones** WCAG 2.1 A/AA en `/es` y `/en`, desktop y mobile.
 - Sin scroll horizontal en 390 / 768 / 1440 px.
 - Navegación por teclado completa, skip link y foco visible en todo elemento interactivo.

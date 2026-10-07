@@ -34,6 +34,7 @@ export function Eclipse({
   className = "",
   rimWidth = 3,
   drift = true,
+  disc = true,
 }: {
   /** Tamaño y posición los pone quien lo usa. */
   className?: string;
@@ -41,6 +42,9 @@ export function Eclipse({
   rimWidth?: number;
   /** Anillo secundario que gira muy lento. */
   drift?: boolean;
+  /** false dibuja sólo el canto de luz: sirve cuando lo que va adentro del
+   *  círculo es otra cosa —en el hero, el video. */
+  disc?: boolean;
 }) {
   const ringMask = `radial-gradient(closest-side, transparent calc(100% - ${rimWidth}px), #000 calc(100% - ${rimWidth}px + 0.5px))`;
 
@@ -52,13 +56,15 @@ export function Eclipse({
       <div className="glow-halo absolute -inset-[12%] rounded-full blur-2xl" />
 
       {/* Disco: negro con una caída sutil para que lea como esfera */}
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            "radial-gradient(120% 120% at 68% 22%, #0d0d13 0%, #050508 45%, #020203 100%)",
-        }}
-      />
+      {disc && (
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "radial-gradient(120% 120% at 68% 22%, #0d0d13 0%, #050508 45%, #020203 100%)",
+          }}
+        />
+      )}
 
       {/* Canto de luz principal */}
       <div
