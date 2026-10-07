@@ -3,8 +3,11 @@
 /* ==========================================================================
    MOVA — tokens de marca
    Derivados del isologo: un eclipse. Disco negro, borde de luz cálida (oro)
-   del lado derecho, borde frío (halo azul) del izquierdo. Todo el sitio vive
-   de ese contraste: vacío + luz de canto.
+   del lado derecho, borde frío (halo) del izquierdo.
+
+   Una sola familia tipográfica para todo el sitio. Lo que ordena la página no
+   es el contraste entre dos letras sino el contraste de escala: una etiqueta
+   de 10px al lado de una frase de 8rem, y mucho vacío entre las dos.
    ========================================================================== */
 
 @theme {
@@ -30,9 +33,9 @@
 
   --color-steel:      #72808e;
 
-  /* Tipografías (inyectadas por next/font en <html>) */
-  --font-display:   var(--font-jost), "Futura", "Avenir Next", system-ui, sans-serif;
-  --font-editorial: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  /* Una sola familia. Schibsted Grotesk: grotesca calma, con el carácter
+     suficiente para sostener una frase a 8rem sin pedir atención. */
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
 
   /* Ritmo */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -48,7 +51,7 @@ body {
   padding: 0;
   background: var(--color-void);
   color: var(--color-ink);
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -58,8 +61,6 @@ body {
 html {
   scroll-behavior: auto;
   overflow-x: hidden;
-  /* Jost es angosto: un pelín más de aire mejora la lectura en cuerpo */
-  letter-spacing: 0.005em;
 }
 
 body {
@@ -105,7 +106,9 @@ body {
    Utilidades de marca
    ========================================================================== */
 
-/* Texto con el degradé metálico del logo: frío → brillo → oro */
+/* El degradé metálico del logo sobre texto. Se usa UNA sola vez en todo el
+   sitio —la segunda línea del titular del hero— y es el único momento en que
+   una letra no es simplemente tinta sobre negro. */
 .text-eclipse {
   background: linear-gradient(
     100deg,
@@ -120,7 +123,7 @@ body {
   color: transparent;
 }
 
-/* Hairline: separador de 1px que respira */
+/* Filete: separador de 1px que respira en los extremos */
 .hairline {
   height: 1px;
   background: linear-gradient(
@@ -132,7 +135,7 @@ body {
   );
 }
 
-/* Halo cálido difuso de fondo */
+/* Halos difusos de fondo */
 .glow-gold {
   background: radial-gradient(
     closest-side,
@@ -184,6 +187,7 @@ body {
 
 /* ==========================================================================
    Animaciones
+   Queda lo que sostiene al eclipse y lo que hace entrar al texto. Nada más.
    ========================================================================== */
 
 @keyframes scrollHint {
@@ -212,7 +216,10 @@ body {
   animation: breathe 5s ease-in-out infinite;
 }
 
-/* Reveal al entrar en viewport (lo activa un IntersectionObserver) */
+/* — Revelados —
+   Un solo IntersectionObserver (layout/Reveals.tsx) le pone .is-revealed a
+   cualquier cosa con [data-reveal]; el movimiento es todo CSS. */
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(22px);
@@ -225,6 +232,24 @@ body {
 [data-reveal].is-revealed {
   opacity: 1;
   transform: none;
+}
+
+/* Línea de titular: entra desde abajo del renglón, no desde el costado. */
+[data-reveal="line"] {
+  transform: translateY(0.62em);
+  transition-duration: 0.95s;
+}
+
+/* Filete: se dibuja, no aparece. */
+[data-reveal="rule"] {
+  opacity: 1;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.3s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal="rule"].is-revealed {
+  transform: scaleX(1);
 }
 
 /* ==========================================================================
@@ -264,134 +289,5 @@ html.lenis body {
   }
   .grain::after {
     animation: none;
-  }
-}
-
-/* ==========================================================================
-   Sistema de animación — portado del sitio de Canttaglia y reafinado al
-   eclipse. Allá la marca era plata sobre negro; acá todo lo que brilla tiene
-   que entrar por el lado cálido (oro) y caer por el frío (halo).
-   ========================================================================== */
-
-/* — Brillo que recorre el texto (ver primitives/ShinyText.tsx) —
-   El gradiente se recorta contra la tipografía. El color propio pinta el piso:
-   sin él, las letras que quedan fuera del recorrido del reflejo se vuelven
-   invisibles y la palabra se lee a pedazos. */
-.shiny-text {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-color: var(--shiny-base, var(--color-ink-faint));
-  background-repeat: no-repeat;
-  animation-name: shinyText;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-.shiny-pause-hover:hover {
-  animation-play-state: paused;
-}
-
-@keyframes shinyText {
-  0%   { background-position: -150% 0; }
-  100% { background-position: 250% 0; }
-}
-
-/* — Gradiente que viaja por el texto (ver primitives/AnimatedGradientText.tsx) —
-   El fondo mide el triple del ancho y se desplaza: el color viaja sin cortes.
-   Tres paradas en vez de dos, porque el eclipse necesita el brillo del medio
-   entre el halo frío y el oro. */
-.gradient-travel {
-  background-image: linear-gradient(
-    100deg,
-    var(--gr-from) 0%,
-    var(--gr-mid) 16%,
-    var(--gr-to) 33%,
-    var(--gr-mid) 50%,
-    var(--gr-from) 66%,
-    var(--gr-mid) 83%,
-    var(--gr-to) 100%
-  );
-  background-size: 300% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: gradientTravel var(--gr-loop, 11s) linear infinite;
-}
-
-@keyframes gradientTravel {
-  from { background-position: 0% 50%; }
-  to   { background-position: 200% 50%; }
-}
-
-/* — Resplandor de borde (ver primitives/BorderGlow.tsx) —
-   Es un halo por detrás, no un gradiente recortado contra el marco: se asoma
-   alrededor del filete sin tocar el contenido y no depende de mask-composite,
-   que es donde la versión original de este efecto terminaba pintando el botón
-   entero y tapando el texto. */
-.border-glow {
-  position: relative;
-  isolation: isolate;
-}
-.border-glow::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(
-    var(--bg-radio) circle at var(--bg-x) var(--bg-y),
-    rgba(var(--bg-color), 0.55),
-    rgba(var(--bg-color), 0) 68%
-  );
-  filter: blur(8px);
-  opacity: var(--bg-op, 0);
-  transition: opacity 400ms ease;
-  pointer-events: none;
-}
-
-/* — Rastro de frames (ver primitives/ImageTrail.tsx) —
-   La entrada y la salida viven acá para que el componente no tenga que animar
-   por JS cuadro a cuadro. */
-.trail-img {
-  position: absolute;
-  transform: translate(-50%, -50%) scale(0.86);
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
-  animation: trailEntra 420ms var(--ease-out-expo) forwards;
-}
-.trail-img--sale {
-  animation: trailSale 500ms var(--ease-out-expo) forwards;
-}
-
-@keyframes trailEntra {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.86); }
-  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-@keyframes trailSale {
-  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  to   { opacity: 0; transform: translate(-50%, -50%) scale(1.06); }
-}
-
-/* Sin movimiento, cualquier texto que dependa de una animación para tener color
-   tiene que volver a pintarse sólido: transparente y quieto es invisible.
-   Va después del bloque general de arriba a propósito: ese apaga animaciones,
-   éste repone el color que esas animaciones estaban aportando. */
-@media (prefers-reduced-motion: reduce) {
-  .shiny-text,
-  .gradient-travel {
-    animation: none;
-    /* !important porque ShinyText arma el gradiente en un style inline y ése
-       gana por especificidad contra cualquier clase. */
-    background-image: none !important;
-    color: var(--color-ink);
-    -webkit-text-fill-color: var(--color-ink);
-  }
-  .border-glow::after {
-    transition: none;
   }
 }

@@ -3,6 +3,9 @@
 Sitio one-page bilingüe (ES/EN) del estudio. Next.js 16 (App Router) + React 19 +
 Tailwind CSS v4 + TypeScript. Deploy pensado para Vercel.
 
+Cinco bloques, en este orden: **hero · manifiesto · trabajos · servicios ·
+contacto**. Sin dependencias de animación: sólo Lenis para el scroll.
+
 ```bash
 npm install
 npm run dev     # http://localhost:3000 → redirige a /es
@@ -31,11 +34,18 @@ tiene "color de marca" plano: tiene vacío y luz de canto.
 Están en [`src/app/globals.css`](src/app/globals.css) dentro de `@theme`.
 Tocá ahí y cambia todo el sitio.
 
-**Tipografías** (ambas por `next/font`, self-hosted, sin CDN):
-- **Jost** — geométrica tipo Futura. Es la que más se parece al isologo. UI, cuerpo, labels.
-- **Instrument Serif** — alto contraste. Solo para los titulares que tienen que pesar.
+**Una sola tipografía para todo el sitio**: **Schibsted Grotesk**, por
+`next/font` (self-hosted, sin CDN), en tres pesos.
 
-La clase `.text-eclipse` aplica el degradé metálico frío→cálido sobre texto.
+No hay serif, no hay segunda familia, no hay pareja tipográfica. Lo que ordena
+la página es el **contraste de escala**: una etiqueta de 10px al lado de una
+frase de 7rem, y mucho vacío entre las dos. La letra es deliberadamente calma
+—lo extraño tiene que pasar en la composición, no en la tipografía—.
+
+La clase `.text-eclipse` aplica el degradé metálico frío→cálido sobre texto y
+se usa **una sola vez en todo el sitio**: la segunda línea del titular del
+hero. Es el único momento en que una letra no es simplemente tinta sobre
+negro.
 
 ### El isologo
 
@@ -49,55 +59,38 @@ tamaño y hereda los tokens de color.
 
 ---
 
-## Sistema de animación
+## Lo surrealista
 
-Portado del sitio de **Canttaglia** y reafinado al eclipse: allá la marca era
-plata sobre negro, acá todo lo que brilla entra por el lado cálido (oro) y cae
-por el frío (halo). Vive en `src/components/primitives/`.
+Un solo gesto, repetido dos veces: **el eclipse crece hasta no entrar en la
+pantalla**. En el manifiesto y en el contacto la esfera asoma desde abajo,
+demasiado grande para el cuadro que la contiene, y la frase se lee por dentro
+de ella.
 
-| Primitiva | Qué hace | Dónde se usa |
-|---|---|---|
-| `GlowCursor` | Cursor con estela luminosa en canvas, oro → halo | Global (layout) |
-| `motion.tsx` → `LineReveal` | Titular que entra línea por línea desde abajo del renglón | `h1` del hero |
-| `motion.tsx` → `Rule` | Filete de 1px que se dibuja de izquierda a derecha | Hero, footer |
-| `ShinyText` | Reflejo que cruza el texto. CSS puro | Tagline del hero y del footer |
-| `AnimatedGradientText` | Degradé metálico que viaja de punta a punta | Frase del manifiesto |
-| `BorderGlow` | Resplandor que sigue al puntero por el borde | Botones y tarjetas de servicio |
-| `ScrollVelocity` | Banda de texto que acelera y se da vuelta con el scroll | Franja entre servicios y trabajos |
-| `ImageTrail` | Rastro de frames al barrer con el mouse | Sobre la franja |
+Magritte pintaba una manzana que ocupaba la habitación entera, y la pintaba
+plano, sin efectos: lo irreal no está en cómo está hecho sino en la escala.
+Acá es lo mismo — tipografía quieta, mucho negro, y un objeto fuera de lugar.
 
-**La disciplina importa más que los componentes.** `ShinyText` va en dos
-lugares y siempre sobre el tagline; `AnimatedGradientText` en uno solo —la
-frase más grande del sitio, sola en pantalla—. Sobre texto corrido o en cuerpo
-chico ninguno de los dos se lee: sólo ensucian.
+La escala del objeto se calcula contra el viewport (`vw`), no contra un ancho
+fijo: con los valores de desktop, en un teléfono la cúpula caía debajo del
+texto y el gesto se perdía.
 
-Todo respeta `prefers-reduced-motion`, y lo que depende de una animación para
-tener color (los dos de texto) vuelve a pintarse sólido en vez de quedar
-transparente. `GlowCursor` e `ImageTrail` además no se montan si no hay puntero
-fino: en touch no habría nada que seguir.
+## Movimiento
 
-### Al portar se arreglaron dos cosas del original
+Lo mínimo para que la página respire. Sin librería de animación: todo es CSS
+más un único `IntersectionObserver` en `layout/Reveals.tsx` que le pone
+`.is-revealed` a cualquier cosa con `[data-reveal]`.
 
-- **`ShinyText` no brillaba.** El componente ponía `color` en un `style` inline,
-  que gana por especificidad contra el `color: transparent` de la clase. Con el
-  relleno opaco el texto tapaba el gradiente recortado. Acá el color base viaja
-  como custom property (`--shiny-base`) y lo consume el CSS.
-- **`ImageTrail` soltaba dos frames por movimiento.** Creaba un elemento en el
-  `pointermove` y además llamaba a la fábrica interna. El primero quedaba sin
-  temporizador: no se desvanecía nunca y sólo salía del DOM cuando lo empujaba
-  el tope de visibles. Ahora hay una sola fábrica.
+| Qué | Dónde |
+|---|---|
+| El canto del eclipse respira y un anillo fino deriva muy lento | Hero, manifiesto, contacto |
+| Parallax: el eclipse del hero se hunde al scrollear | Hero |
+| `LineReveal` — el titular entra línea por línea desde abajo del renglón | Hero, manifiesto |
+| `Rule` — el filete de 1px se dibuja de izquierda a derecha | Footer |
+| Bloques que suben al entrar en cuadro (`[data-reveal]`) | Todo el sitio |
+| Scroll suave (Lenis) | Global |
+| Grano de película y viñeta | Global |
 
-### Lo que quedó afuera
-
-Dos primitivas de Canttaglia **no** se trajeron, a propósito:
-
-- **`AccordionGallery`** — paneles que se expanden al pasar el mouse. Es
-  excelente, pero es *otra* forma de mostrar portfolio y acá ya está la grilla
-  masonry con modal: dos UIs de portfolio en una misma página compiten. Además
-  necesita imágenes reales con sus medidas. Si cuando lleguen los videos
-  preferís el acordeón en lugar de la grilla, se cambia.
-- **`DraggableCard`** — fotos desparramadas que se arrastran. Es la metáfora de
-  un board de casting; en un estudio de video sería decoración sin sentido.
+Todo respeta `prefers-reduced-motion`.
 
 ---
 
@@ -116,8 +109,8 @@ src/
 │   ├── icon.svg · manifest.ts · robots.ts · sitemap.ts
 ├── components/
 │   ├── layout/   Nav · Footer · SmoothScroll (Lenis) · Reveals
-│   ├── sections/ Hero · Manifesto · Services · Work · Process · Edge · Contact
-│   └── primitives/ Wordmark · Eclipse · SectionHead
+│   ├── sections/ Hero · Manifesto · Work · Services · Contact
+│   └── primitives/ Wordmark · Eclipse · SectionHead · motion (LineReveal, Rule)
 ├── data/works.ts            ← el portfolio
 ├── i18n/                    ← es.ts · en.ts (todo el copy del sitio)
 └── lib/site.ts              ← contacto, dominio, HERO_VIDEO
@@ -204,7 +197,7 @@ usuario a WhatsApp. Configurar Resend antes de publicar.
 ## Calidad verificada
 
 - Build de producción limpio, TypeScript estricto sin errores.
-- Peso de la home: ~315 KB comprimido (210 KB de JS, 57 KB de fuentes).
+- Peso de la home: ~247 KB comprimido (163 KB de JS, 46 KB de fuentes).
 - **axe-core: 0 violaciones** WCAG 2.1 A/AA en `/es` y `/en`, desktop y mobile.
 - Sin scroll horizontal en 390 / 768 / 1440 px.
 - Navegación por teclado completa, skip link y foco visible en todo elemento interactivo.

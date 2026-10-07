@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Jost, Instrument_Serif } from "next/font/google";
+import { Schibsted_Grotesk } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 
@@ -7,24 +7,18 @@ import { LOCALES, SITE_URL, CONTACT, isLocale, type Locale } from "@/lib/site";
 import { getDictionary } from "@/i18n";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Reveals } from "@/components/layout/Reveals";
-import GlowCursor from "@/components/primitives/GlowCursor";
 
-/* Jost: geométrica tipo Futura — es la que más se acerca al isologo.
-   Instrument Serif: alto contraste, para las frases que tienen que pesar. */
-const jost = Jost({
+/* Una sola familia para todo el sitio. Schibsted Grotesk es una grotesca
+   calma: tiene carácter suficiente para sostener una frase a 8rem sin pedir
+   atención, que es exactamente lo que necesita una página donde lo raro tiene
+   que pasar en la composición y no en la letra. */
+const grotesk = Schibsted_Grotesk({
   subsets: ["latin"],
-  variable: "--font-jost",
-  weight: ["300", "400", "500", "600"],
+  variable: "--font-grotesk",
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  variable: "--font-instrument-serif",
-  weight: ["400"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
 
 export const dynamicParams = false;
 
@@ -144,7 +138,7 @@ export default async function RootLayout({
   return (
     <html
       lang={t.htmlLang}
-      className={`${jost.variable} ${instrumentSerif.variable} antialiased`}
+      className={`${grotesk.variable} antialiased`}
     >
       <body className="grain vignette bg-void text-ink">
         <a className="skip-link" href="#contenido">
@@ -152,7 +146,6 @@ export default async function RootLayout({
         </a>
         <SmoothScroll />
         <Reveals />
-        <GlowCursor />
         {children}
         {jsonLd(lang).map((schema, i) => (
           <script

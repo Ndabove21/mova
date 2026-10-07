@@ -5,12 +5,9 @@ import type { Dictionary } from "@/i18n";
 import { HERO_VIDEO, HERO_POSTER } from "@/lib/site";
 import { Eclipse } from "@/components/primitives/Eclipse";
 import { Wordmark } from "@/components/primitives/Wordmark";
-import ShinyText from "@/components/primitives/ShinyText";
-import { LineReveal, Rule } from "@/components/primitives/motion";
-import { useBorderGlow } from "@/components/primitives/BorderGlow";
+import { LineReveal } from "@/components/primitives/motion";
 
 export function Hero({ t }: { t: Dictionary }) {
-  const glow = useBorderGlow({ glowRadius: 150, edgeSensitivity: 70 });
   const eclipseRef = useRef<HTMLDivElement>(null);
   const markRef = useRef<HTMLDivElement>(null);
 
@@ -45,89 +42,46 @@ export function Hero({ t }: { t: Dictionary }) {
   }, []);
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col overflow-hidden">
-      {/* Reel de fondo — se activa cuando HERO_VIDEO deja de ser null */}
-      {HERO_VIDEO && (
-        <div className="absolute inset-0 -z-10">
-          <video
-            className="h-full w-full object-cover opacity-45"
-            src={HERO_VIDEO}
-            poster={HERO_POSTER ?? undefined}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-          />
-          <div className="from-void via-void/55 to-void absolute inset-0 bg-gradient-to-b" />
-        </div>
-      )}
+    <>
+      {/* Primera pantalla: un objeto encendido en el vacío y un nombre.
+          Nada más. Lo que la vuelve extraña es justamente lo que falta. */}
+      <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-5">
+        {HERO_VIDEO && (
+          <div className="absolute inset-0 -z-10">
+            <video
+              className="h-full w-full object-cover opacity-45"
+              src={HERO_VIDEO}
+              poster={HERO_POSTER ?? undefined}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-hidden="true"
+            />
+            <div className="from-void via-void/55 to-void absolute inset-0 bg-gradient-to-b" />
+          </div>
+        )}
 
-      {/* Eclipse + isologo */}
-      <div className="relative flex flex-1 items-center justify-center px-5 pt-24 pb-10 sm:px-8">
         <div
           ref={eclipseRef}
-          className="absolute top-1/2 left-1/2 w-[min(92vw,66svh,760px)] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+          className="absolute top-1/2 left-1/2 w-[min(92vw,66svh,720px)] -translate-x-1/2 -translate-y-1/2 will-change-transform"
         >
           <Eclipse className="w-full" rimWidth={3} />
         </div>
 
         <div ref={markRef} className="relative z-10 text-center will-change-transform">
           <Wordmark
-            className="mx-auto w-[min(62vw,460px)]"
+            className="mx-auto w-[min(60vw,420px)]"
             title="MOVA — AI Creative Studio"
           />
-          <p className="mt-5 text-[0.6rem] font-light tracking-[0.62em] uppercase sm:mt-7 sm:text-[0.72rem] sm:tracking-[0.74em]">
+          <p className="text-ink-faint mt-6 text-[0.6rem] tracking-[0.62em] uppercase sm:mt-8 sm:text-[0.72rem] sm:tracking-[0.74em]">
             <span className="sr-only">MOVA — </span>
-            <ShinyText
-              text={t.hero.eyebrow}
-              color="var(--color-ink-dim)"
-              speed={6}
-              spread={150}
-            />
+            {t.hero.eyebrow}
           </p>
         </div>
-      </div>
 
-      {/* Pie del hero: la frase, el cuerpo y las acciones */}
-      <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 pb-12 sm:px-8 sm:pb-14 lg:px-12">
-        <Rule className="mb-8" />
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
-          <LineReveal
-            as="h1"
-            className="font-editorial text-ink text-[2.1rem] leading-[1.04] tracking-[-0.015em] sm:text-[3rem] lg:col-span-7 lg:text-[3.7rem]"
-            lines={[
-              t.hero.title[0],
-              <span key="2" className="text-eclipse">
-                {t.hero.title[1]}
-              </span>,
-            ]}
-          />
-
-          <div className="lg:col-span-5">
-            <p className="text-ink-dim max-w-[46ch] text-[0.95rem] leading-relaxed font-light sm:text-base">
-              {t.hero.body}
-            </p>
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <a
-                href="#trabajos"
-                className="bg-ink text-void hover:bg-gold rounded-full px-7 py-3 text-[12px] font-medium tracking-[0.16em] uppercase transition-colors duration-300"
-              >
-                {t.hero.ctaPrimary}
-              </a>
-              <a
-                href="#contacto"
-                {...glow}
-                className={`${glow.className} border-ink/25 text-ink hover:border-ink/60 rounded-full border px-7 py-3 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300`}
-              >
-                {t.hero.ctaSecondary}
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 flex items-center gap-3 sm:mt-12">
+        <div className="absolute bottom-10 left-5 flex items-center gap-3 sm:left-8 lg:left-12">
           <span className="text-ink-faint text-[10px] tracking-[0.3em] uppercase">
             {t.hero.scroll}
           </span>
@@ -135,7 +89,50 @@ export function Hero({ t }: { t: Dictionary }) {
             <span className="bg-gold animate-scroll-hint absolute inset-0 block" />
           </span>
         </div>
+      </section>
+
+      {/* Segunda pantalla: recién acá aparece la frase. */}
+      <div className="mx-auto w-full max-w-[1440px] px-5 pt-20 pb-28 sm:px-8 sm:pt-28 sm:pb-40 lg:px-12">
+        <LineReveal
+          as="h1"
+          className="max-w-[18ch] text-[clamp(2.1rem,6vw,4.6rem)] leading-[1.0] tracking-[-0.035em]"
+          lines={[
+            t.hero.title[0],
+            <span key="2" className="text-eclipse">
+              {t.hero.title[1]}
+            </span>,
+          ]}
+        />
+
+        <div className="mt-16 grid sm:mt-24 lg:grid-cols-12">
+          <div className="lg:col-span-6 lg:col-start-7">
+            <p
+              data-reveal
+              className="text-ink-dim max-w-[46ch] text-[1.0625rem] leading-[1.65]"
+            >
+              {t.hero.body}
+            </p>
+            <div
+              data-reveal
+              style={{ "--reveal-delay": "110ms" } as React.CSSProperties}
+              className="mt-10 flex flex-wrap items-center gap-3"
+            >
+              <a
+                href="#trabajos"
+                className="bg-ink text-void hover:bg-gold rounded-full px-8 py-3.5 text-[11px] font-medium tracking-[0.18em] uppercase transition-colors duration-300"
+              >
+                {t.hero.ctaPrimary}
+              </a>
+              <a
+                href="#contacto"
+                className="border-line text-ink hover:border-ink/55 rounded-full border px-8 py-3.5 text-[11px] tracking-[0.18em] uppercase transition-colors duration-300"
+              >
+                {t.hero.ctaSecondary}
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </>
   );
 }

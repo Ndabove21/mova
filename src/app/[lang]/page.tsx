@@ -7,10 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { Manifesto } from "@/components/sections/Manifesto";
 import { Services } from "@/components/sections/Services";
-import { Marquee } from "@/components/sections/Marquee";
 import { Work } from "@/components/sections/Work";
-import { Process } from "@/components/sections/Process";
-import { Edge } from "@/components/sections/Edge";
 import { Contact } from "@/components/sections/Contact";
 
 export default async function Page({
@@ -29,11 +26,8 @@ export default async function Page({
       <main id="contenido">
         <Hero t={t} />
         <Manifesto t={t} />
-        <Services t={t} />
-        <Marquee t={t} />
         <Work t={t} lang={lang} />
-        <Process t={t} />
-        <Edge t={t} />
+        <Services t={t} />
         <Contact t={t} lang={lang} />
       </main>
       <Footer t={t} lang={lang} />

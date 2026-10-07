@@ -4,12 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import type { Locale } from "@/lib/site";
 import { whatsappHref } from "@/lib/site";
-import {
-  CATEGORY_LABELS,
-  WORKS,
-  type Work,
-  type WorkCategory,
-} from "@/data/works";
+import { CATEGORY_LABELS, WORKS, type Work } from "@/data/works";
 import { SectionHead } from "@/components/primitives/SectionHead";
 
 const TINTS: Record<NonNullable<Work["tint"]>, string> = {
@@ -26,59 +21,25 @@ const ASPECT: Record<Work["aspect"], string> = {
 };
 
 export function Work({ t, lang }: { t: Dictionary; lang: Locale }) {
-  const [filter, setFilter] = useState<WorkCategory | "all">("all");
   const [open, setOpen] = useState<Work | null>(null);
 
-  const categories = useMemo(() => {
-    const present = new Set(WORKS.map((w) => w.category));
-    return (Object.keys(CATEGORY_LABELS) as WorkCategory[]).filter((c) =>
-      present.has(c)
-    );
-  }, []);
-
-  const visible = useMemo(
-    () => (filter === "all" ? WORKS : WORKS.filter((w) => w.category === filter)),
-    [filter]
-  );
-  const featured = visible.filter((w) => w.wide);
-  const rest = visible.filter((w) => !w.wide);
+  const featured = useMemo(() => WORKS.filter((w) => w.wide), []);
+  const rest = useMemo(() => WORKS.filter((w) => !w.wide), []);
 
   return (
     <section
       id="trabajos"
-      className="relative mx-auto w-full max-w-[1440px] px-5 py-24 sm:px-8 sm:py-32 lg:px-12"
+      className="mx-auto w-full max-w-[1440px] px-5 py-32 sm:px-8 sm:py-44 lg:px-12"
     >
       <SectionHead eyebrow={t.work.eyebrow} title={t.work.title} lead={t.work.lead} />
 
-      {/* Filtros */}
-      <div
-        data-reveal
-        className="mt-12 flex flex-wrap items-center gap-2 sm:mt-14"
-        role="group"
-        aria-label={t.work.title}
-      >
-        <FilterChip
-          active={filter === "all"}
-          onClick={() => setFilter("all")}
-          label={t.work.filterAll}
-        />
-        {categories.map((c) => (
-          <FilterChip
-            key={c}
-            active={filter === c}
-            onClick={() => setFilter(c)}
-            label={CATEGORY_LABELS[c][lang]}
-          />
-        ))}
-      </div>
-
-      {visible.length === 0 ? (
-        <p className="text-ink-faint mt-16 text-sm">{t.work.empty}</p>
+      {WORKS.length === 0 ? (
+        <p className="text-ink-faint mt-20 text-sm">{t.work.empty}</p>
       ) : (
-        <>
-          {/* Pieza destacada: ancho completo */}
+        <div className="mt-16 sm:mt-24">
+          {/* Pieza destacada: ancho completo, formato cine */}
           {featured.map((w) => (
-            <div key={w.slug} data-reveal className="mt-8">
+            <div key={w.slug} data-reveal>
               <WorkCard work={w} t={t} lang={lang} onOpen={() => setOpen(w)} />
             </div>
           ))}
@@ -91,7 +52,7 @@ export function Work({ t, lang }: { t: Dictionary; lang: Locale }) {
                 <li
                   key={w.slug}
                   data-reveal
-                  style={{ "--reveal-delay": `${(i % 3) * 90}ms` } as React.CSSProperties}
+                  style={{ "--reveal-delay": `${(i % 3) * 80}ms` } as React.CSSProperties}
                   className="mb-4 break-inside-avoid sm:mb-5"
                 >
                   <WorkCard work={w} t={t} lang={lang} onOpen={() => setOpen(w)} />
@@ -99,16 +60,16 @@ export function Work({ t, lang }: { t: Dictionary; lang: Locale }) {
               ))}
             </ul>
           )}
-        </>
+        </div>
       )}
 
-      <div data-reveal className="mt-14 flex flex-wrap items-center gap-x-4 gap-y-2">
-        <span className="text-ink-dim text-sm font-light">{t.work.cta}</span>
+      <div data-reveal className="mt-16 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span className="text-ink-dim text-[1.0625rem]">{t.work.cta}</span>
         <a
           href={whatsappHref(t.contact.whatsappMessage)}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gold hover:text-ink text-sm underline-offset-4 transition-colors hover:underline"
+          className="text-gold hover:text-ink text-[1.0625rem] underline-offset-[6px] transition-colors hover:underline"
         >
           {t.work.ctaLink}
         </a>
@@ -116,31 +77,6 @@ export function Work({ t, lang }: { t: Dictionary; lang: Locale }) {
 
       {open && <WorkModal work={open} t={t} lang={lang} onClose={() => setOpen(null)} />}
     </section>
-  );
-}
-
-function FilterChip({
-  active,
-  onClick,
-  label,
-}: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`rounded-full border px-4 py-1.5 text-[11px] tracking-[0.16em] uppercase transition-colors duration-300 ${
-        active
-          ? "border-gold/60 text-gold"
-          : "border-line text-ink-faint hover:border-ink/35 hover:text-ink-dim"
-      }`}
-    >
-      {label}
-    </button>
   );
 }
 
@@ -158,11 +94,7 @@ function WorkCard({
   const videoRef = useRef<HTMLVideoElement>(null);
   const isPlaceholder = !!work.placeholder;
 
-  const play = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.play().catch(() => {});
-  };
+  const play = () => videoRef.current?.play().catch(() => {});
   const pause = () => {
     const v = videoRef.current;
     if (!v) return;
@@ -173,7 +105,7 @@ function WorkCard({
   const inner = (
     <>
       <div
-        className={`relative w-full overflow-hidden rounded-sm ${
+        className={`relative w-full overflow-hidden ${
           work.wide ? "aspect-[16/9] lg:aspect-[21/9]" : ASPECT[work.aspect]
         }`}
         style={isPlaceholder ? { background: TINTS[work.tint ?? "steel"] } : undefined}
@@ -207,41 +139,33 @@ function WorkCard({
             )}
           </>
         )}
+      </div>
 
-        {/* Degradé para que el texto siempre tenga contraste */}
-        <div
-          aria-hidden="true"
-          className="from-void/85 absolute inset-0 bg-gradient-to-t via-transparent to-transparent"
-        />
-
-        <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
-          <div>
-            <p className="text-ink-faint text-[10px] tracking-[0.26em] uppercase">
-              {CATEGORY_LABELS[work.category][lang]}
-              {isPlaceholder && <> · {t.work.soon}</>}
-            </p>
-            <h3 className="font-editorial text-ink mt-1.5 text-[1.3rem] leading-tight">
-              {work.title[lang]}
-            </h3>
-          </div>
-          {!isPlaceholder && (
-            <span
-              aria-hidden="true"
-              className="border-ink/30 text-ink group-hover:border-gold group-hover:text-gold flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors duration-300"
-            >
-              <svg viewBox="0 0 12 14" className="h-3 w-3 fill-current">
-                <path d="M0 0l12 7-12 7z" />
-              </svg>
-            </span>
-          )}
+      {/* El pie va debajo de la pieza, nunca encima: la imagen se muestra
+          entera y el texto se lee sin pelear contra ella. */}
+      <div className="flex items-baseline justify-between gap-4 pt-4">
+        <div>
+          <p className="text-ink-faint text-[10px] tracking-[0.26em] uppercase">
+            {CATEGORY_LABELS[work.category][lang]}
+            {isPlaceholder && <> · {t.work.soon}</>}
+          </p>
+          <h3 className="mt-2 text-[1.2rem] leading-tight tracking-[-0.02em]">
+            {work.title[lang]}
+          </h3>
         </div>
+        {!isPlaceholder && (
+          <span
+            aria-hidden="true"
+            className="text-ink-faint group-hover:text-gold shrink-0 text-[10px] tracking-[0.26em] uppercase transition-colors duration-300"
+          >
+            {t.work.play}
+          </span>
+        )}
       </div>
     </>
   );
 
-  if (isPlaceholder) {
-    return <div className="group block cursor-default">{inner}</div>;
-  }
+  if (isPlaceholder) return <div className="block cursor-default">{inner}</div>;
 
   return (
     <button
@@ -264,14 +188,14 @@ function PlaceholderArt() {
   return (
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
       <div
-        className="absolute top-1/2 left-1/2 aspect-square w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        className="absolute top-1/2 left-1/2 aspect-square w-[58%] -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
           background:
             "conic-gradient(from 20deg, rgba(255,247,235,0.55) 0deg, rgba(228,178,122,0.25) 70deg, transparent 150deg, transparent 250deg, rgba(166,198,226,0.3) 310deg, rgba(255,247,235,0.45) 360deg)",
           WebkitMask:
             "radial-gradient(closest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px))",
           mask: "radial-gradient(closest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px))",
-          opacity: 0.6,
+          opacity: 0.55,
         }}
       />
     </div>
@@ -321,13 +245,13 @@ function WorkModal({
         ref={closeRef}
         type="button"
         onClick={onClose}
-        className="text-ink-dim hover:text-ink absolute top-5 right-5 text-[11px] tracking-[0.2em] uppercase transition-colors sm:top-8 sm:right-8"
+        className="text-ink-dim hover:text-ink absolute top-5 right-5 text-[10px] tracking-[0.26em] uppercase transition-colors sm:top-8 sm:right-8"
       >
         {t.work.close}
       </button>
 
       <div className="w-full max-w-5xl">
-        <div className="bg-void-2 relative aspect-video w-full overflow-hidden rounded-sm">
+        <div className="bg-void-2 relative aspect-video w-full overflow-hidden">
           {embed ? (
             <iframe
               src={embed}
@@ -352,8 +276,8 @@ function WorkModal({
           )}
         </div>
         <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="font-editorial text-ink text-xl">{work.title[lang]}</h3>
-          <p className="text-ink-faint text-[11px] tracking-[0.2em] uppercase">
+          <h3 className="text-xl tracking-[-0.02em]">{work.title[lang]}</h3>
+          <p className="text-ink-faint text-[10px] tracking-[0.26em] uppercase">
             {work.client} · {CATEGORY_LABELS[work.category][lang]} · {work.year}
           </p>
         </div>

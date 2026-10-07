@@ -5,13 +5,11 @@ import { useEffect, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import type { Locale } from "@/lib/site";
 import { MarkGlyph, Wordmark } from "@/components/primitives/Wordmark";
-import { useBorderGlow } from "@/components/primitives/BorderGlow";
 
 export function Nav({ t, lang }: { t: Dictionary; lang: Locale }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const other: Locale = lang === "es" ? "en" : "es";
-  const glow = useBorderGlow({ glowRadius: 130, edgeSensitivity: 55 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -59,7 +57,7 @@ export function Nav({ t, lang }: { t: Dictionary; lang: Locale }) {
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
-                  className="text-ink-dim hover:text-ink text-[13px] font-light tracking-[0.14em] uppercase transition-colors duration-300"
+                  className="text-ink-dim hover:text-ink text-[11px] tracking-[0.22em] uppercase transition-colors duration-300"
                 >
                   {l.label}
                 </a>
@@ -79,8 +77,7 @@ export function Nav({ t, lang }: { t: Dictionary; lang: Locale }) {
 
             <a
               href="#contacto"
-              {...glow}
-              className={`${glow.className} border-ink/25 text-ink hover:border-gold hover:text-gold hidden rounded-full border px-5 py-2 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300 sm:inline-block`}
+              className={`border-ink/25 text-ink hover:border-gold hover:text-gold hidden rounded-full border px-5 py-2 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300 sm:inline-block`}
             >
               {t.nav.cta}
             </a>
@@ -121,16 +118,13 @@ export function Nav({ t, lang }: { t: Dictionary; lang: Locale }) {
 
         <nav className="px-5 pt-10" aria-label={t.nav.menu}>
           <ul className="flex flex-col gap-1">
-            {t.nav.links.map((l, i) => (
+            {t.nav.links.map((l) => (
               <li key={l.id}>
                 <a
                   href={`#${l.id}`}
                   onClick={() => setOpen(false)}
-                  className="font-editorial text-ink hover:text-gold block py-3 text-[2.25rem] leading-none transition-colors"
+                  className="text-ink hover:text-gold block py-4 text-[2.1rem] leading-none tracking-[-0.03em] transition-colors"
                 >
-                  <span className="text-ink-faint mr-4 align-super text-[0.7rem] tracking-widest">
-                    0{i + 1}
-                  </span>
                   {l.label}
                 </a>
               </li>

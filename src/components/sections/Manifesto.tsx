@@ -1,51 +1,57 @@
-import AnimatedGradientText from "@/components/primitives/AnimatedGradientText";
 import type { Dictionary } from "@/i18n";
+import { Eclipse } from "@/components/primitives/Eclipse";
+import { LineReveal } from "@/components/primitives/motion";
 
+/**
+ * El centro surrealista del sitio.
+ *
+ * Un solo gesto: el eclipse crece hasta no entrar en la pantalla y asoma desde
+ * abajo, demasiado grande para el cuadro que lo contiene. Magritte pintaba una
+ * manzana que ocupaba la habitación entera y la pintaba plano, sin efectos: lo
+ * irreal no está en cómo está hecho sino en la escala. Acá es lo mismo — la
+ * tipografía es la misma de todo el sitio, quieta, y el objeto es el que está
+ * fuera de lugar.
+ */
 export function Manifesto({ t }: { t: Dictionary }) {
   return (
     <section
       id="manifiesto"
-      className="relative mx-auto w-full max-w-[1440px] overflow-hidden px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44"
+      className="relative flex min-h-[100svh] items-center overflow-hidden"
     >
-      {/* Luz de canto detrás del texto */}
+      {/* El objeto que no entra en la habitación */}
       <div
         aria-hidden="true"
-        className="glow-gold pointer-events-none absolute top-1/2 -left-32 h-[520px] w-[520px] -translate-y-1/2 rounded-full blur-3xl"
-      />
+        className="pointer-events-none absolute bottom-[-18%] left-1/2 w-[190vw] -translate-x-1/2 opacity-65 sm:bottom-[-55%] sm:w-[min(130vw,1350px)]"
+      >
+        <Eclipse className="w-full" rimWidth={4} />
+      </div>
 
-      <div className="relative grid gap-10 lg:grid-cols-12 lg:gap-10">
+      <div className="relative mx-auto w-full max-w-[1440px] px-5 py-32 sm:px-8 sm:py-40 lg:px-12">
         <p
           data-reveal
-          className="text-ink-faint text-[10px] tracking-[0.34em] uppercase lg:col-span-3"
+          className="text-ink-faint text-[10px] tracking-[0.34em] uppercase"
         >
           {t.manifesto.eyebrow}
         </p>
 
-        <div className="lg:col-span-9">
-          <p
-            data-reveal
-            className="font-editorial text-[2.3rem] leading-[1.08] tracking-[-0.02em] text-balance sm:text-[3.4rem] lg:text-[4.2rem]"
-          >
-            {/* Única pieza del sitio con el degradé en movimiento: es la frase
-                más grande y está sola en pantalla, que es donde un gradiente
-                que viaja se lee como metal y no como un efecto pegado. */}
-            <AnimatedGradientText speed={13}>
-              {t.manifesto.statement}
-            </AnimatedGradientText>
-          </p>
+        <LineReveal
+          as="h2"
+          className="mt-10 text-[clamp(2.5rem,8.6vw,7.4rem)] leading-[0.95] tracking-[-0.042em]"
+          lines={t.manifesto.statement}
+          delay={1}
+        />
 
-          <div className="mt-12 grid max-w-3xl gap-6 sm:mt-14 sm:grid-cols-2 sm:gap-8">
-            {t.manifesto.body.map((p, i) => (
-              <p
-                key={i}
-                data-reveal
-                style={{ "--reveal-delay": `${120 + i * 110}ms` } as React.CSSProperties}
-                className="text-ink-dim text-[0.95rem] leading-relaxed font-light"
-              >
-                {p}
-              </p>
-            ))}
-          </div>
+        <div className="mt-20 grid gap-8 sm:mt-28 sm:grid-cols-2 sm:gap-12 lg:max-w-[70%]">
+          {t.manifesto.body.map((p, i) => (
+            <p
+              key={i}
+              data-reveal
+              style={{ "--reveal-delay": `${i * 120}ms` } as React.CSSProperties}
+              className="text-ink-dim text-[1.0625rem] leading-[1.65]"
+            >
+              {p}
+            </p>
+          ))}
         </div>
       </div>
     </section>

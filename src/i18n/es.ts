@@ -27,8 +27,6 @@ export const es = {
     links: [
       { id: "trabajos", label: "Trabajos" },
       { id: "servicios", label: "Servicios" },
-      { id: "proceso", label: "Proceso" },
-      { id: "estudio", label: "Estudio" },
     ],
     cta: "Hablemos",
     menu: "Menú",
@@ -43,73 +41,21 @@ export const es = {
     ctaPrimary: "Ver trabajos",
     ctaSecondary: "Empezar un proyecto",
     scroll: "Scroll",
-    reelLabel: "Reel 2026",
   },
 
   manifesto: {
-    eyebrow: "01 — Manifiesto",
-    statement: "Todo lo que ves empieza en negro.",
+    eyebrow: "Manifiesto",
+    statement: ["Todo lo que ves", "empieza en negro."],
     body: [
       "Una pantalla negra solía significar un presupuesto, seis semanas de rodaje y veinte personas coordinadas. Hoy puede significar una dirección clara y una máquina que escucha.",
       "Elegimos lo segundo, pero con el criterio de lo primero. Porque la herramienta cambió; el estándar, no.",
     ],
   },
 
-  services: {
-    eyebrow: "02 — Servicios",
-    title: "Lo que hacemos",
-    lead:
-      "Cinco formas de usar la misma herramienta. Lo que no cambia es la dirección detrás de cada plano.",
-    items: [
-      {
-        n: "01",
-        title: "Spots y campañas",
-        body:
-          "Comerciales completos: concepto, guion, generación y finishing. De brief aprobado a master entregado en días, no en meses.",
-      },
-      {
-        n: "02",
-        title: "Contenido para redes",
-        body:
-          "Reels, TikToks y ads verticales en volumen. Diez variantes de la misma idea para testear cuál convierte antes de poner la pauta.",
-      },
-      {
-        n: "03",
-        title: "Videoclip y pieza de arte",
-        body:
-          "Visuales para shows, loops para pantallas, videoclips. Donde la IA deja de imitar al cine y empieza a hacer otra cosa.",
-      },
-      {
-        n: "04",
-        title: "Avatares y presentadores",
-        body:
-          "Rostros consistentes que hablan tu idioma. Para onboarding, cursos, soporte o campañas que necesitan una cara y no un actor.",
-      },
-      {
-        n: "05",
-        title: "Dirección de arte y look dev",
-        body:
-          "Antes de generar, decidimos. Paleta, lente, grano y luz: un look que se sostiene plano a plano y no se deshace a mitad de la pieza.",
-      },
-      {
-        n: "06",
-        title: "Post y finishing",
-        body:
-          "Montaje, color, sonido y música. La IA genera material; el oficio es lo que lo convierte en una pieza que se puede emitir.",
-      },
-    ],
-  },
-
-  marquee: [
-    "SPOTS · REELS · VIDEOCLIPS · AVATARES · DIRECCIÓN DE ARTE · POST ·",
-    "MOVA — AI CREATIVE STUDIO ·",
-  ],
-
   work: {
-    eyebrow: "03 — Trabajos",
+    eyebrow: "Trabajos",
     title: "Selección",
-    lead: "Piezas recientes. Pasá el mouse para ver, hacé click para abrir.",
-    filterAll: "Todo",
+    lead: "Piezas recientes.",
     play: "Reproducir",
     close: "Cerrar",
     empty: "Próximamente.",
@@ -118,65 +64,40 @@ export const es = {
     ctaLink: "Pedilo por WhatsApp",
   },
 
-  process: {
-    eyebrow: "04 — Proceso",
-    title: "Cómo trabajamos",
-    lead: "Cuatro pasos. Sin sorpresas y sin presupuestos que se abren a mitad de camino.",
-    steps: [
-      {
-        n: "01",
-        title: "Brief",
-        body:
-          "Una llamada de treinta minutos. Qué querés decir, a quién, con qué presupuesto y para cuándo.",
-      },
-      {
-        n: "02",
-        title: "Dirección",
-        body:
-          "Moodboard, guion y look definido. Aprobás la estética antes de que se genere un solo frame.",
-      },
-      {
-        n: "03",
-        title: "Generación",
-        body:
-          "Producimos y mostramos avances reales, no promesas. Iterar es barato: usamos eso a favor tuyo.",
-      },
-      {
-        n: "04",
-        title: "Entrega",
-        body:
-          "Master en los formatos que necesites, más los cortes para cada plataforma. Los archivos quedan a tu nombre.",
-      },
-    ],
-  },
-
-  edge: {
-    eyebrow: "05 — Estudio",
-    title: "Por qué funciona",
-    lead:
-      "No vendemos tecnología. Vendemos el resultado de usarla bien — que es otra cosa.",
+  services: {
+    eyebrow: "Servicios",
+    title: "Lo que hacemos",
+    lead: "Seis formas de usar la misma herramienta.",
     items: [
       {
-        k: "Días, no meses",
-        v: "Un spot completo entre cinco y diez días hábiles, desde brief aprobado.",
+        title: "Spots y campañas",
+        body: "De brief aprobado a master entregado en días, no en meses.",
       },
       {
-        k: "Sin set, sin viaje",
-        v: "Locaciones imposibles, épocas distintas y escalas que no entran en un presupuesto de rodaje.",
+        title: "Contenido para redes",
+        body: "Diez variantes de la misma idea, para testear antes de poner la pauta.",
       },
       {
-        k: "Iterar deja de doler",
-        v: "Cambiar de idea ya no cuesta un día de producción. Probamos, descartamos y volvemos a probar.",
+        title: "Videoclip y pieza de arte",
+        body: "Donde la IA deja de imitar al cine y empieza a hacer otra cosa.",
       },
       {
-        k: "El criterio de siempre",
-        v: "Dirección, guion, montaje y color. La herramienta es nueva; el oficio tiene cien años.",
+        title: "Avatares y presentadores",
+        body: "Rostros consistentes que hablan tu idioma, sin convocar un casting.",
+      },
+      {
+        title: "Dirección de arte y look dev",
+        body: "Paleta, lente, grano y luz decididos antes de generar el primer plano.",
+      },
+      {
+        title: "Post y finishing",
+        body: "Montaje, color, sonido y música. Lo que convierte material en pieza.",
       },
     ],
   },
 
   contact: {
-    eyebrow: "06 — Contacto",
+    eyebrow: "Contacto",
     title: "Contemos algo",
     lead:
       "Contanos qué tenés en la cabeza. Si hay proyecto, en 24 horas te respondemos con una idea y un número.",
@@ -207,8 +128,7 @@ export const es = {
       tooShort: "Contanos un poco más",
     },
     whatsapp: "Escribir por WhatsApp",
-    whatsappMessage:
-      "Hola MOVA, vengo de la web y quiero contarles un proyecto.",
+    whatsappMessage: "Hola MOVA, vengo de la web y quiero contarles un proyecto.",
     or: "o",
     emailLabel: "Mail",
   },

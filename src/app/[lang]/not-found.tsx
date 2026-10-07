@@ -14,10 +14,10 @@ export default function NotFound() {
 
       <div className="relative">
         <Wordmark className="mx-auto w-[min(52vw,300px)]" title="MOVA" />
-        <p className="font-editorial text-eclipse mt-10 text-[2.4rem] leading-tight sm:text-[3rem]">
+        <p className="text-eclipse mt-12 text-[clamp(2.2rem,6vw,3.4rem)] leading-none tracking-[-0.035em]">
           404
         </p>
-        <p className="text-ink-dim mt-3 text-sm font-light">
+        <p className="text-ink-dim mt-4 text-[1.0625rem]">
           Esta página no existe. / This page doesn&apos;t exist.
         </p>
         <Link
