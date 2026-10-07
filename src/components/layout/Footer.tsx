@@ -3,6 +3,8 @@ import type { Dictionary } from "@/i18n";
 import type { Locale } from "@/lib/site";
 import { CONTACT } from "@/lib/site";
 import { Wordmark } from "@/components/primitives/Wordmark";
+import ShinyText from "@/components/primitives/ShinyText";
+import { Rule } from "@/components/primitives/motion";
 
 export function Footer({ t, lang }: { t: Dictionary; lang: Locale }) {
   const other: Locale = lang === "es" ? "en" : "es";
@@ -18,8 +20,8 @@ export function Footer({ t, lang }: { t: Dictionary; lang: Locale }) {
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-5">
             <Wordmark className="h-5 w-auto" title="MOVA" />
-            <p className="text-ink-faint mt-4 text-[10px] tracking-[0.46em] uppercase">
-              {t.footer.tagline}
+            <p className="mt-4 text-[10px] tracking-[0.46em] uppercase">
+              <ShinyText text={t.footer.tagline} speed={7} spread={160} delay={1.2} />
             </p>
           </div>
 
@@ -73,7 +75,7 @@ export function Footer({ t, lang }: { t: Dictionary; lang: Locale }) {
           </div>
         </div>
 
-        <div className="hairline my-10" />
+        <Rule className="my-10" />
 
         <div className="text-ink-faint flex flex-wrap items-center justify-between gap-4 text-[11px] tracking-[0.1em]">
           <p>

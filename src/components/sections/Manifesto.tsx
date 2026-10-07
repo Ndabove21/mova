@@ -1,3 +1,4 @@
+import AnimatedGradientText from "@/components/primitives/AnimatedGradientText";
 import type { Dictionary } from "@/i18n";
 
 export function Manifesto({ t }: { t: Dictionary }) {
@@ -25,7 +26,12 @@ export function Manifesto({ t }: { t: Dictionary }) {
             data-reveal
             className="font-editorial text-[2.3rem] leading-[1.08] tracking-[-0.02em] text-balance sm:text-[3.4rem] lg:text-[4.2rem]"
           >
-            <span className="text-eclipse">{t.manifesto.statement}</span>
+            {/* Única pieza del sitio con el degradé en movimiento: es la frase
+                más grande y está sola en pantalla, que es donde un gradiente
+                que viaja se lee como metal y no como un efecto pegado. */}
+            <AnimatedGradientText speed={13}>
+              {t.manifesto.statement}
+            </AnimatedGradientText>
           </p>
 
           <div className="mt-12 grid max-w-3xl gap-6 sm:mt-14 sm:grid-cols-2 sm:gap-8">

@@ -49,6 +49,58 @@ tamaño y hereda los tokens de color.
 
 ---
 
+## Sistema de animación
+
+Portado del sitio de **Canttaglia** y reafinado al eclipse: allá la marca era
+plata sobre negro, acá todo lo que brilla entra por el lado cálido (oro) y cae
+por el frío (halo). Vive en `src/components/primitives/`.
+
+| Primitiva | Qué hace | Dónde se usa |
+|---|---|---|
+| `GlowCursor` | Cursor con estela luminosa en canvas, oro → halo | Global (layout) |
+| `motion.tsx` → `LineReveal` | Titular que entra línea por línea desde abajo del renglón | `h1` del hero |
+| `motion.tsx` → `Rule` | Filete de 1px que se dibuja de izquierda a derecha | Hero, footer |
+| `ShinyText` | Reflejo que cruza el texto. CSS puro | Tagline del hero y del footer |
+| `AnimatedGradientText` | Degradé metálico que viaja de punta a punta | Frase del manifiesto |
+| `BorderGlow` | Resplandor que sigue al puntero por el borde | Botones y tarjetas de servicio |
+| `ScrollVelocity` | Banda de texto que acelera y se da vuelta con el scroll | Franja entre servicios y trabajos |
+| `ImageTrail` | Rastro de frames al barrer con el mouse | Sobre la franja |
+
+**La disciplina importa más que los componentes.** `ShinyText` va en dos
+lugares y siempre sobre el tagline; `AnimatedGradientText` en uno solo —la
+frase más grande del sitio, sola en pantalla—. Sobre texto corrido o en cuerpo
+chico ninguno de los dos se lee: sólo ensucian.
+
+Todo respeta `prefers-reduced-motion`, y lo que depende de una animación para
+tener color (los dos de texto) vuelve a pintarse sólido en vez de quedar
+transparente. `GlowCursor` e `ImageTrail` además no se montan si no hay puntero
+fino: en touch no habría nada que seguir.
+
+### Al portar se arreglaron dos cosas del original
+
+- **`ShinyText` no brillaba.** El componente ponía `color` en un `style` inline,
+  que gana por especificidad contra el `color: transparent` de la clase. Con el
+  relleno opaco el texto tapaba el gradiente recortado. Acá el color base viaja
+  como custom property (`--shiny-base`) y lo consume el CSS.
+- **`ImageTrail` soltaba dos frames por movimiento.** Creaba un elemento en el
+  `pointermove` y además llamaba a la fábrica interna. El primero quedaba sin
+  temporizador: no se desvanecía nunca y sólo salía del DOM cuando lo empujaba
+  el tope de visibles. Ahora hay una sola fábrica.
+
+### Lo que quedó afuera
+
+Dos primitivas de Canttaglia **no** se trajeron, a propósito:
+
+- **`AccordionGallery`** — paneles que se expanden al pasar el mouse. Es
+  excelente, pero es *otra* forma de mostrar portfolio y acá ya está la grilla
+  masonry con modal: dos UIs de portfolio en una misma página compiten. Además
+  necesita imágenes reales con sus medidas. Si cuando lleguen los videos
+  preferís el acordeón en lugar de la grilla, se cambia.
+- **`DraggableCard`** — fotos desparramadas que se arrastran. Es la metáfora de
+  un board de casting; en un estudio de video sería decoración sin sentido.
+
+---
+
 ## Estructura
 
 ```
@@ -152,9 +204,11 @@ usuario a WhatsApp. Configurar Resend antes de publicar.
 ## Calidad verificada
 
 - Build de producción limpio, TypeScript estricto sin errores.
+- Peso de la home: ~315 KB comprimido (210 KB de JS, 57 KB de fuentes).
 - **axe-core: 0 violaciones** WCAG 2.1 A/AA en `/es` y `/en`, desktop y mobile.
 - Sin scroll horizontal en 390 / 768 / 1440 px.
 - Navegación por teclado completa, skip link y foco visible en todo elemento interactivo.
-- `prefers-reduced-motion` respetado (Lenis, grano, parallax y reveals se apagan).
+- `prefers-reduced-motion` respetado: Lenis, grano, parallax, reveals, marquesina,
+  brillos y cursor se apagan, y los textos con degradé vuelven a color sólido.
 - SEO: canonical, `hreflang` es/en/x-default, Open Graph con imagen generada por idioma,
   Twitter cards, JSON-LD (`ProfessionalService` + `WebSite`), `sitemap.xml`, `robots.txt`.

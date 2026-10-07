@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import type { Dictionary } from "@/i18n";
 import type { Locale } from "@/lib/site";
 import { MarkGlyph, Wordmark } from "@/components/primitives/Wordmark";
+import { useBorderGlow } from "@/components/primitives/BorderGlow";
 
 export function Nav({ t, lang }: { t: Dictionary; lang: Locale }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const other: Locale = lang === "es" ? "en" : "es";
+  const glow = useBorderGlow({ glowRadius: 130, edgeSensitivity: 55 });
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -77,7 +79,8 @@ export function Nav({ t, lang }: { t: Dictionary; lang: Locale }) {
 
             <a
               href="#contacto"
-              className="border-ink/25 text-ink hover:border-gold hover:text-gold hidden rounded-full border px-5 py-2 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300 sm:inline-block"
+              {...glow}
+              className={`${glow.className} border-ink/25 text-ink hover:border-gold hover:text-gold hidden rounded-full border px-5 py-2 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300 sm:inline-block`}
             >
               {t.nav.cta}
             </a>

@@ -5,8 +5,12 @@ import type { Dictionary } from "@/i18n";
 import { HERO_VIDEO, HERO_POSTER } from "@/lib/site";
 import { Eclipse } from "@/components/primitives/Eclipse";
 import { Wordmark } from "@/components/primitives/Wordmark";
+import ShinyText from "@/components/primitives/ShinyText";
+import { LineReveal, Rule } from "@/components/primitives/motion";
+import { useBorderGlow } from "@/components/primitives/BorderGlow";
 
 export function Hero({ t }: { t: Dictionary }) {
+  const glow = useBorderGlow({ glowRadius: 150, edgeSensitivity: 70 });
   const eclipseRef = useRef<HTMLDivElement>(null);
   const markRef = useRef<HTMLDivElement>(null);
 
@@ -74,22 +78,32 @@ export function Hero({ t }: { t: Dictionary }) {
             className="mx-auto w-[min(62vw,460px)]"
             title="MOVA — AI Creative Studio"
           />
-          <p className="text-ink-dim mt-5 text-[0.6rem] font-light tracking-[0.62em] uppercase sm:mt-7 sm:text-[0.72rem] sm:tracking-[0.74em]">
+          <p className="mt-5 text-[0.6rem] font-light tracking-[0.62em] uppercase sm:mt-7 sm:text-[0.72rem] sm:tracking-[0.74em]">
             <span className="sr-only">MOVA — </span>
-            {t.hero.eyebrow}
+            <ShinyText
+              text={t.hero.eyebrow}
+              color="var(--color-ink-dim)"
+              speed={6}
+              spread={150}
+            />
           </p>
         </div>
       </div>
 
       {/* Pie del hero: la frase, el cuerpo y las acciones */}
       <div className="relative z-10 mx-auto w-full max-w-[1440px] px-5 pb-12 sm:px-8 sm:pb-14 lg:px-12">
-        <div className="hairline mb-8" />
+        <Rule className="mb-8" />
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-10">
-          <h1 className="font-editorial text-ink text-[2.1rem] leading-[1.04] tracking-[-0.015em] text-balance sm:text-[3rem] lg:col-span-7 lg:text-[3.7rem]">
-            {t.hero.title[0]}
-            <br />
-            <span className="text-eclipse">{t.hero.title[1]}</span>
-          </h1>
+          <LineReveal
+            as="h1"
+            className="font-editorial text-ink text-[2.1rem] leading-[1.04] tracking-[-0.015em] sm:text-[3rem] lg:col-span-7 lg:text-[3.7rem]"
+            lines={[
+              t.hero.title[0],
+              <span key="2" className="text-eclipse">
+                {t.hero.title[1]}
+              </span>,
+            ]}
+          />
 
           <div className="lg:col-span-5">
             <p className="text-ink-dim max-w-[46ch] text-[0.95rem] leading-relaxed font-light sm:text-base">
@@ -104,7 +118,8 @@ export function Hero({ t }: { t: Dictionary }) {
               </a>
               <a
                 href="#contacto"
-                className="border-ink/25 text-ink hover:border-ink/60 rounded-full border px-7 py-3 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300"
+                {...glow}
+                className={`${glow.className} border-ink/25 text-ink hover:border-ink/60 rounded-full border px-7 py-3 text-[12px] font-light tracking-[0.16em] uppercase transition-colors duration-300`}
               >
                 {t.hero.ctaSecondary}
               </a>

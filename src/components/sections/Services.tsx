@@ -1,5 +1,6 @@
 import type { Dictionary } from "@/i18n";
 import { SectionHead } from "@/components/primitives/SectionHead";
+import BorderGlow from "@/components/primitives/BorderGlow";
 
 export function Services({ t }: { t: Dictionary }) {
   return (
@@ -19,8 +20,13 @@ export function Services({ t }: { t: Dictionary }) {
             key={s.n}
             data-reveal
             style={{ "--reveal-delay": `${(i % 3) * 90}ms` } as React.CSSProperties}
-            className="group border-line-soft hover:border-gold/35 relative border-t p-7 transition-colors duration-500 sm:p-8"
+            className="h-full"
           >
+            <BorderGlow
+              glowRadius={260}
+              glowIntensity={0.7}
+              edgeSensitivity={150}
+              className="group border-line-soft hover:border-gold/35 relative h-full border-t p-7 transition-colors duration-500 sm:p-8">
             {/* Barrido cálido al pasar el mouse */}
             <span
               aria-hidden="true"
@@ -35,6 +41,7 @@ export function Services({ t }: { t: Dictionary }) {
             <p className="text-ink-dim relative mt-3.5 max-w-[42ch] text-[0.9rem] leading-relaxed font-light">
               {s.body}
             </p>
+            </BorderGlow>
           </li>
         ))}
       </ul>

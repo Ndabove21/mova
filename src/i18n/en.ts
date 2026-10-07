@@ -102,6 +102,11 @@ export const en: Dictionary = {
     ],
   },
 
+  marquee: [
+    "COMMERCIALS · REELS · MUSIC FILMS · AVATARS · ART DIRECTION · POST ·",
+    "MOVA — AI CREATIVE STUDIO ·",
+  ],
+
   work: {
     eyebrow: "03 — Work",
     title: "Selected",

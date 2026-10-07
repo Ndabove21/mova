@@ -7,6 +7,7 @@ import { LOCALES, SITE_URL, CONTACT, isLocale, type Locale } from "@/lib/site";
 import { getDictionary } from "@/i18n";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { Reveals } from "@/components/layout/Reveals";
+import GlowCursor from "@/components/primitives/GlowCursor";
 
 /* Jost: geométrica tipo Futura — es la que más se acerca al isologo.
    Instrument Serif: alto contraste, para las frases que tienen que pesar. */
@@ -151,6 +152,7 @@ export default async function RootLayout({
         </a>
         <SmoothScroll />
         <Reveals />
+        <GlowCursor />
         {children}
         {jsonLd(lang).map((schema, i) => (
           <script

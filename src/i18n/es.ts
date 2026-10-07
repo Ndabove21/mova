@@ -100,6 +100,11 @@ export const es = {
     ],
   },
 
+  marquee: [
+    "SPOTS · REELS · VIDEOCLIPS · AVATARES · DIRECCIÓN DE ARTE · POST ·",
+    "MOVA — AI CREATIVE STUDIO ·",
+  ],
+
   work: {
     eyebrow: "03 — Trabajos",
     title: "Selección",
