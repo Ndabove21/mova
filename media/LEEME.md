@@ -82,3 +82,49 @@ pudo:
 2. El logo **sobre fondo negro sólido** (`#050505`). Para este sitio alcanza y
    la calidad es perfecta.
 3. Un **PNG con canal alfa real** — no un JPEG con el damero dibujado encima.
+
+
+## `letras-fuente/` — las piezas del logotipo
+
+Las cuatro letras que mandó el cliente, cada una sobre un damero de
+transparencia quemado en píxeles. **De acá sale el logotipo del sitio.**
+
+A diferencia del lockup completo, estas piezas son **opacas**, así que el
+damero sólo está alrededor y el recorte es exacto:
+
+1. El damero es neutro y claro (tonos ~208 y ~254, saturación cero); el metal
+   es saturado y/o oscuro. Esa doble condición separa fondo de letra sin tocar
+   la geometría.
+2. Una **apertura morfológica** mata la mota que deja el ruido de compresión
+   en el damero, y el resultado se usa como compuerta del alfa fino, que es el
+   que conserva el antialias del borde.
+3. Se desmultiplica contra el gris del fondo para que el canto no quede claro.
+
+Resultado en `public/images/letras/` con un alfa residual en el fondo de
+0,0013 sobre 1.
+
+El lockup aplanado (`public/images/logo-mova.png`) se compone desde esas
+cuatro piezas con las proporciones que documenta `MovaLockup.tsx`.
+
+## `mova-logo-alfa.png`
+
+El lockup completo exportado **con canal alfa real** (2752×1536, 88%
+transparente). Es mejor que el JPEG con damero, pero el RGB todavía arrastra
+cuadros del damero donde el logo era semitransparente, así que no se usa.
+
+## `publicidad-modulos-master.mov`
+
+**Material real del cliente**: comercial de módulos habitacionales en montaña.
+2560×1440, 60 fps, 34,8s, HEVC, 88 MB. Está en `.gitignore` por peso; los
+derivados optimizados sí están versionados:
+
+```bash
+# Showreel (sólo se descarga al hacer click)
+ffmpeg -i media/publicidad-modulos-master.mov -vf "scale=1920:-2,fps=30" \
+  -c:v libx264 -crf 25 -preset slow -c:a aac -b:a 128k \
+  -movflags +faststart public/videos/showreel.mp4
+
+# Loop mudo para el hover de la tarjeta
+ffmpeg -ss 7 -t 6 -i media/publicidad-modulos-master.mov \
+  -vf "scale=1280:-2,fps=25" -an -c:v libx264 -crf 28 public/videos/project-01.mp4
+```

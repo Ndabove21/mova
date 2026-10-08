@@ -124,6 +124,12 @@ function Reproductor({ pieza, soon }: { pieza: Work; soon: string }) {
  * a 7 columnas que se mira como un afiche y, al lado, el resto como índice
  * tipográfico. La jerarquía la hace el tamaño, no el color.
  */
+/** La categoría se arma con los nombres traducidos de los servicios, para que
+ *  siga el idioma de la página en vez de quedar fija en los datos. */
+function categoria(t: Dictionary, w: Work) {
+  return w.cats.map((i) => t.services.items[i]?.title).filter(Boolean).join(" / ");
+}
+
 export function SelectedWork({ t }: { t: Dictionary }) {
   const { abrir } = useContacto();
   const reduce = useReducedMotion();
@@ -242,7 +248,7 @@ export function SelectedWork({ t }: { t: Dictionary }) {
               // dentro del botón: WCAG 2.5.3 pide que el nombre contenga el
               // texto visible del control, y "visible" lo es aunque lleve
               // aria-hidden — eso oculta al lector, no a la vista.
-              alt={`${principal.n} — ${principal.title} — ${principal.category}`}
+              alt={`${principal.n} — ${principal.title} — ${categoria(t, principal)}`}
               aspect="aspect-[4/3]"
               sizes="(min-width: 1024px) 58vw, 100vw"
               cursorLabel={t.cursor.play}
@@ -282,7 +288,7 @@ export function SelectedWork({ t }: { t: Dictionary }) {
                 {principal.title}
               </h3>
               <p className="mt-3 text-[10px] tracking-[0.3em] text-ink-faint uppercase">
-                {principal.category} <span className="text-gold">/</span> {principal.year}
+                {categoria(t, principal)} <span className="text-gold">/</span> {principal.year}
               </p>
             </figcaption>
           </figure>
@@ -312,7 +318,7 @@ export function SelectedWork({ t }: { t: Dictionary }) {
                         {w.title}
                       </h3>
                       <p className="mt-2 text-[10px] tracking-[0.25em] text-ink-faint uppercase">
-                        {w.category}
+                        {categoria(t, w)}
                       </p>
                     </div>
 
@@ -390,7 +396,7 @@ export function SelectedWork({ t }: { t: Dictionary }) {
                     {pieza.title}
                   </h3>
                   <p className="mt-2 text-[10px] tracking-[0.3em] text-ink-faint uppercase">
-                    {pieza.category} <span className="text-gold">/</span> {pieza.year}
+                    {categoria(t, pieza)} <span className="text-gold">/</span> {pieza.year}
                   </p>
                 </div>
 

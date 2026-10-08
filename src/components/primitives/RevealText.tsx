@@ -20,8 +20,9 @@ const linea: Variants = {
  * decisión de composición, no del navegador.
  *
  * El `overflow-hidden` del span exterior es lo que hace el efecto —la línea no
- * aparece, entra—. El `pb` compensa las colas de las letras, que si no se
- * recortan contra la máscara.
+ * aparece, entra—, pero recorta la caja arriba y abajo. El padding devuelve el
+ * aire que necesitan las tildes y las colas; el margen negativo lo descuenta
+ * para no tocar el interlineado.
  */
 export function RevealText({
   lines,
@@ -43,7 +44,12 @@ export function RevealText({
   return (
     <Tag className={className}>
       {lines.map((l, i) => (
-        <span key={i} className="block overflow-hidden pb-[0.1em]">
+        // El `overflow-hidden` es lo que hace el efecto —la línea entra desde
+        // abajo del renglón en vez de aparecer—, pero recorta la caja por
+        // arriba y por abajo. El padding le devuelve aire a las TILDES (Á, Í)
+        // y a las colas (p, g), y el margen negativo lo descuenta para que el
+        // interlineado no cambie. Sin el `pt`, "MÁS ALLÁ" se lee "MAS ALLA".
+        <span key={i} className="-mt-[0.22em] -mb-[0.1em] block overflow-hidden pt-[0.22em] pb-[0.1em]">
           <motion.span
             className={`block ${lineClassName}`}
             custom={i + delay}

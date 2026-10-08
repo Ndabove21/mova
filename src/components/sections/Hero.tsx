@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, X } from "lucide-react";
 
 import { Eclipse } from "@/components/primitives/Eclipse";
-import { Logotype } from "@/components/primitives/Logotype";
+import { MovaLockup } from "@/components/primitives/MovaLockup";
 import { MoltenMetal } from "@/components/primitives/MoltenMetal";
 import { MagneticButton } from "@/components/primitives/MagneticButton";
 import { PlaceholderTag } from "@/components/primitives/PlaceholderTag";
@@ -283,24 +283,29 @@ export function Hero({ t }: { t: Dictionary }) {
           transition={entrada(1.4, 0.5)}
         >
           <div ref={logo} className="flex h-full w-full flex-col items-center justify-center will-change-transform">
-            {/* El logotipo va como IMAGEN fija, no como video: es un PNG con
-                transparencia sacado del render del cliente —se promedió el clip
-                en el tiempo para borrar las partículas, que se mueven, y dejar
-                las letras, que no—. Fijo gana sobre el video en todo lo que
-                importa acá: pesa 650 KB menos, no hay rectángulo 16:9 que
-                disimular, y el descriptor y el claim pasan a ser texto HTML
-                real en vez de píxeles quemados. */}
-            <Logotype
-              className="w-[min(84vw,900px)]"
+            {/* El logotipo se ARMA acá letra por letra, con las piezas que
+                mandó el cliente. Cada una entra por su cuenta: la portada se
+                construye delante del visitante en vez de aparecer hecha. */}
+            <MovaLockup
+              className="w-[min(86vw,900px)]"
+              delay={0.35}
               priority
-              sizes="(max-width: 768px) 84vw, 900px"
+              sizes="(max-width: 768px) 86vw, 900px"
             />
-            <p className="mt-7 text-center text-[0.58rem] tracking-[0.5em] text-ink-dim uppercase sm:mt-9 sm:text-[0.72rem] sm:tracking-[0.62em]">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={entrada(1.1, 1.5)}
+              className="mt-8 text-center text-[0.58rem] tracking-[0.5em] text-ink-dim uppercase sm:mt-11 sm:text-[0.72rem] sm:tracking-[0.62em]">
               {t.brand.descriptor}
-            </p>
-            <p className="mt-4 text-center text-[0.55rem] tracking-[0.34em] text-ink-faint uppercase sm:mt-5 sm:text-[0.66rem] sm:tracking-[0.42em]">
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={entrada(1.1, 1.75)}
+              className="mt-4 text-center text-[0.55rem] tracking-[0.34em] text-ink-faint uppercase sm:mt-5 sm:text-[0.66rem] sm:tracking-[0.42em]">
               {t.brand.claim}
-            </p>
+            </motion.p>
           </div>
         </motion.div>
       </div>

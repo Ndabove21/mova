@@ -54,24 +54,25 @@ titulares.
 
 ### El isologo
 
-El logotipo del sitio sale del render que mandó el cliente
-(`media/logo21-source.mp4`), no de un dibujo a mano:
+El cliente mandó la **M, el aro, la V y la A como piezas sueltas**, así que el
+logotipo no es una imagen: se arma.
 
-En el hero, en el nav y en el footer va el mismo `Logotype.tsx`: un PNG con
-transparencia extraído del render del cliente. Se promedió temporalmente el
-clip para borrar las partículas —se mueven, las letras no— y se recortó contra
-el negro, que ahí es una clave exacta.
+- **En la portada**, `MovaLockup.tsx` compone las cuatro letras y las hace
+  entrar una por una. La portada se construye delante del visitante en vez de
+  aparecer hecha.
+- **En el nav y el footer**, el mismo lockup aplanado a un PNG
+  (`logo-mova.png`). A 15 px de alto, cuatro peticiones de imagen no se pagan.
 
-Fijo y no video, a propósito: pesa ~1 MB menos, no hay rectángulo 16:9 que
-disimular, y el descriptor y el claim pasan a ser texto HTML real en vez de
-píxeles quemados —los lee Google y los lee un lector de pantalla—.
+Las proporciones no son un reparto en partes iguales — salen de medir las
+piezas y ajustar a ojo:
 
-Esto reemplazó al vector dibujado a mano, que **no reproducía las letras
-reales**: en el logotipo del cliente la M tiene el vértice del medio curvo y la
-A es una Λ con swash, no una A con barra.
+- La **O va un 7% más alta**. Es un círculo, y un círculo a la misma altura que
+  una letra de remates rectos se ve más chico.
+- El par **V–A lleva un espacio negativo**. Son dos diagonales que se abren en
+  direcciones opuestas, así que el hueco óptico entre ellas es mucho mayor que
+  el real; sin meterlas una dentro de la otra, "MOVA" se lee "MOV A".
 
-> Para fondos claros sigue haciendo falta el vectorial — ver
-> [`media/LEEME.md`](media/LEEME.md).
+Para regenerar el lockup plano desde las letras, ver `media/LEEME.md`.
 
 ### El fondo: metal fundido
 
@@ -165,9 +166,13 @@ src/
 
 Rutas `/es` y `/en`. El criterio:
 
-- **Etiquetas y titulares quedan en inglés en las dos versiones** — son lenguaje
-  de marca: `SERVICES`, `SELECTED WORK`, `CREATE BEYOND REALITY`.
-- **Las frases se traducen**, igual que el formulario.
+**Todo se traduce**: etiquetas, titulares, rubros, CTA y formulario. La única
+palabra que no cambia es el nombre de la marca.
+
+Los **títulos de las piezas** del portfolio viven en `src/data/works.ts` y no en
+el diccionario, porque son nombres propios de cada trabajo —como el título de
+una película—. Las **categorías** sí salen del diccionario: son taxonomía del
+sitio, así que siguen el idioma elegido.
 
 Todo el texto está en [`src/i18n/`](src/i18n/). `en.ts` es la fuente y `es.ts`
 está tipado contra él: si agregás una clave en uno y no en el otro, no compila.
@@ -176,8 +181,17 @@ está tipado contra él: si agregás una clave en uno y no en el otro, no compil
 
 ## Las imágenes y los videos
 
-**Todo lo que hay en `public/images` y `public/videos` es placeholder
-generado**: abstracto, en la paleta de la marca, para sostener la maqueta hasta
+**Material real del cliente** (no reemplazar):
+
+| Archivo | Qué es |
+|---|---|
+| `images/letras/{M,O,V,A}.png` | Las cuatro piezas del logotipo, recortadas |
+| `images/logo-mova.png` | El lockup aplanado, generado desde las anteriores |
+| `videos/showreel.mp4` | El comercial de módulos, 35s |
+| `videos/project-01.mp4` | Loop de hover de esa misma pieza |
+| `images/work-01.jpg` · `poster-showreel.jpg` · `poster-project-01.jpg` · `cta.jpg` | Fotogramas del comercial |
+
+**El resto de `public/images` y `public/videos` es placeholder generado**: abstracto, en la paleta de la marca, para sostener la maqueta hasta
 que llegue el material real. Con `SHOW_PLACEHOLDER_LABELS = true` en
 `src/lib/site.ts` cada media lleva una etiqueta discreta con su nombre de
 archivo, para saber exactamente qué reemplazar. Apagá el flag cuando entren los
@@ -237,7 +251,8 @@ en consola; en producción devuelve error y manda a WhatsApp.
 - **axe-core: 0 violaciones** WCAG 2.1 AA en `/es` y `/en`, a 390 / 768 / 1440.
 - Sin scroll horizontal en 390 / 768 / 1024 / 1440 / 1920.
 - 60 fps con los dos canvas de WebGL montados.
-- Peso de la home: **~605 KB** comprimido.
+- Peso de la home: **~1 MB** comprimido. El showreel (11 MB) sólo se descarga
+  al hacer click.
 - Interacciones probadas: comparador por teclado, modal de proyecto, capa de
   contacto, envío del formulario, cierre con Escape.
 - [ ] `SITE_URL` con el dominio definitivo (afecta canonical, hreflang, OG y sitemap).

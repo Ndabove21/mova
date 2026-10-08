@@ -1,20 +1,14 @@
 import Image from "next/image";
 
 /**
- * El logotipo de MOVA.
+ * El logotipo de MOVA, aplanado.
  *
- * Es un PNG con transparencia extraído del render que mandó el cliente
- * (`media/logo21-source.mp4`): se promedió temporalmente el video para borrar
- * las partículas —se mueven, las letras no— y después se recortó contra el
- * negro, que acá es una clave exacta y no una estimación.
+ * Es el mismo lockup que arma `MovaLockup.tsx` letra por letra, exportado a un
+ * solo PNG. Acá conviene plano: a 15 px de alto en el nav, cuatro peticiones
+ * de imagen por un logotipo no se pagan, y no hay animación que justifique
+ * tener las piezas sueltas.
  *
- * Reemplaza al vector dibujado a mano, que no reproducía las letras reales:
- * en el logotipo del cliente la M tiene el vértice del medio curvo y la A es
- * una Λ con swash, no una A con barra.
- *
- * Las zonas oscuras del metal quedan semitransparentes, que es lo correcto
- * sobre el negro del sitio. Para fondos claros hace falta el vectorial —ver
- * `media/LEEME.md`—.
+ * Se regenera desde `public/images/letras/` — ver `media/LEEME.md`.
  */
 export function Logotype({
   className = "",
@@ -27,10 +21,10 @@ export function Logotype({
 }) {
   return (
     <Image
-      src="/images/logo21-mark.png"
+      src="/images/logo-mova.png"
       alt="MOVA"
-      width={2374}
-      height={514}
+      width={2527}
+      height={449}
       sizes={sizes}
       priority={priority}
       className={`select-none ${className}`}
