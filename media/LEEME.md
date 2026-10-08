@@ -39,3 +39,46 @@ comparten frecuencia espacial y no se separan: queda fantasma.
 > `Wordmark.tsx` **no reproduce las letras reales**. En el logo del cliente la
 > M tiene el vértice del medio redondeado (no en punta) y la A no lleva barra
 > transversal. Con un archivo limpio se puede redibujar fiel.
+
+## `logo21-source.mp4`
+
+Segunda animación del isologo, la buena: 10s, 1280×720, con audio. **De acá
+sale el logotipo que usa el sitio.**
+
+El PNG con transparencia (`public/images/logo21-mark.png`) se extrajo así:
+
+1. **Mediana temporal del clip.** Las partículas se mueven y las letras no, así
+   que la mediana de ~50 cuadros las borra y deja el logotipo limpio.
+2. **Clave de luminancia contra el negro.** Acá sí es una clave exacta: el
+   fondo es negro puro, así que el alfa ES la luminancia. Nada que ver con el
+   problema del damero.
+
+```bash
+ffmpeg -ss 4 -t 6 -i media/logo21-source.mp4 -vf "fps=8,scale=1280:-1" fr/f%03d.png
+# después: mediana por píxel + clave de luminancia (ver historial de git)
+```
+
+Las zonas oscuras del metal quedan semitransparentes, que es lo correcto sobre
+el negro del sitio. **Para fondos claros sigue haciendo falta el vectorial.**
+
+## Por qué no se usó `mova-logo-alta-damero.jpg` (alias `logo21.jpg`)
+
+Es el de mayor resolución (2752×1536) y por eso se intentó varias veces. No se
+pudo:
+
+- La grilla del damero mide **45,8679 px**, no 46, y arranca en x=44,87 /
+  y=38,87. Con esa medida exacta el fondo se recupera perfecto: donde no hay
+  logo, el residuo contra la grilla da **1,8** sobre 255.
+- El problema es el logo en sí: **se exportó semitransparente**. El damero se
+  ve *a través* del metal, así que el gris del fondo queda mezclado con el
+  color real y su textura comparte frecuencia espacial con la grilla.
+- Restando iterativamente la componente correlacionada con el damero (ventana
+  de un período, 5 pasadas) el residuo baja de **15,3 a 1,3** — un 92% menos—,
+  pero el fantasma sigue siendo visible a tamaño de portada.
+
+**Lo que hay que pedir**, en orden de preferencia:
+
+1. El **vectorial** (SVG o AI). Resuelve logotipo, favicon y Open Graph de una.
+2. El logo **sobre fondo negro sólido** (`#050505`). Para este sitio alcanza y
+   la calidad es perfecta.
+3. Un **PNG con canal alfa real** — no un JPEG con el damero dibujado encima.

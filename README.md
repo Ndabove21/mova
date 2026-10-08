@@ -57,14 +57,14 @@ titulares.
 El logotipo del sitio sale del render que mandó el cliente
 (`media/logo21-source.mp4`), no de un dibujo a mano:
 
-- **En el hero** va el video completo (`/videos/logo21.*`), a escala de logotipo
-  y no a sangre: el master es de 1100 px de ancho y estirarlo a toda la
-  pantalla lo ablandaría. Lleva una máscara radial que funde el canto del
-  cuadro 16:9 con el fondo, así no se ve el rectángulo del archivo.
-- **En el nav y el footer** va `Logotype.tsx`, un PNG con transparencia
-  extraído de ese mismo video: se promedió temporalmente el clip para borrar
-  las partículas —se mueven, las letras no— y se recortó contra el negro, que
-  acá es una clave exacta.
+En el hero, en el nav y en el footer va el mismo `Logotype.tsx`: un PNG con
+transparencia extraído del render del cliente. Se promedió temporalmente el
+clip para borrar las partículas —se mueven, las letras no— y se recortó contra
+el negro, que ahí es una clave exacta.
+
+Fijo y no video, a propósito: pesa ~1 MB menos, no hay rectángulo 16:9 que
+disimular, y el descriptor y el claim pasan a ser texto HTML real en vez de
+píxeles quemados —los lee Google y los lee un lector de pantalla—.
 
 Esto reemplazó al vector dibujado a mano, que **no reproducía las letras
 reales**: en el logotipo del cliente la M tiene el vértice del medio curvo y la
@@ -196,7 +196,6 @@ assets definitivos.
 | `images/cta.jpg` | Montañas oscuras + columna de luz dorada |
 | `videos/showreel.mp4` | El showreel del estudio |
 | `videos/project-01.mp4` | La pieza 01 completa |
-| `videos/logo21.*` | **Material real del cliente**, no placeholder |
 | `images/logo21-mark.png` | **Material real**: el logotipo extraído de ese video |
 
 Para cada video conviene además un poster (`images/poster-*.jpg`) con el mismo
@@ -238,8 +237,7 @@ en consola; en producción devuelve error y manda a WhatsApp.
 - **axe-core: 0 violaciones** WCAG 2.1 AA en `/es` y `/en`, a 390 / 768 / 1440.
 - Sin scroll horizontal en 390 / 768 / 1024 / 1440 / 1920.
 - 60 fps con los dos canvas de WebGL montados.
-- Peso de la home: ~1,66 MB comprimido, de los cuales ~1 MB es el video del
-  isologo. Sin él, ~660 KB.
+- Peso de la home: **~605 KB** comprimido.
 - Interacciones probadas: comparador por teclado, modal de proyecto, capa de
   contacto, envío del formulario, cierre con Escape.
 - [ ] `SITE_URL` con el dominio definitivo (afecta canonical, hreflang, OG y sitemap).

@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, X } from "lucide-react";
 
 import { Eclipse } from "@/components/primitives/Eclipse";
+import { Logotype } from "@/components/primitives/Logotype";
 import { MoltenMetal } from "@/components/primitives/MoltenMetal";
 import { MagneticButton } from "@/components/primitives/MagneticButton";
 import { PlaceholderTag } from "@/components/primitives/PlaceholderTag";
@@ -281,43 +282,25 @@ export function Hero({ t }: { t: Dictionary }) {
           animate={{ opacity: 1, filter: "blur(0px)" }}
           transition={entrada(1.4, 0.5)}
         >
-          <div ref={logo} className="flex h-full w-full items-center justify-center will-change-transform">
-            {/* El isologo animado que mandó el cliente. Trae dentro el
-                logotipo, el descriptor y el claim, así que no se repiten en
-                HTML: el h1 sr-only de arriba ya los expone al lector de
-                pantalla y a Google.
-
-                `mix-blend-mode: screen` es la clave del montaje: el video
-                viene compuesto sobre negro, y con screen el negro se vuelve
-                neutro —result = fondo— de modo que sólo pasan el metal y las
-                partículas, flotando sobre el campo fundido. Sin eso habría
-                que recortar un rectángulo 16:9 contra el fondo.
-
-                El ancho está topado en 980 px a propósito: el master es de
-                1280 px de ancho y estirarlo a sangre lo ablanda. A este
-                tamaño el escalado queda en ~1,5× en retina, que aguanta. */}
-            <video
-              className="w-[min(88vw,980px)] max-h-full object-contain"
-              style={{
-                // El canto del cuadro se funde con el fondo. Sin esto se ve el
-                // rectángulo 16:9 del archivo: `mix-blend-mode: screen` no
-                // sirve acá porque el `filter` de la animación de entrada crea
-                // un contexto de apilado y aísla el blending del fondo.
-                WebkitMaskImage:
-                  "radial-gradient(ellipse 74% 72% at 50% 46%, #000 48%, transparent 94%)",
-                maskImage:
-                  "radial-gradient(ellipse 74% 72% at 50% 46%, #000 48%, transparent 94%)",
-              }}
-              poster="/images/poster-logo21.jpg"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-            >
-              <source src="/videos/logo21.webm" type="video/webm" />
-              <source src="/videos/logo21.mp4" type="video/mp4" />
-            </video>
+          <div ref={logo} className="flex h-full w-full flex-col items-center justify-center will-change-transform">
+            {/* El logotipo va como IMAGEN fija, no como video: es un PNG con
+                transparencia sacado del render del cliente —se promedió el clip
+                en el tiempo para borrar las partículas, que se mueven, y dejar
+                las letras, que no—. Fijo gana sobre el video en todo lo que
+                importa acá: pesa 650 KB menos, no hay rectángulo 16:9 que
+                disimular, y el descriptor y el claim pasan a ser texto HTML
+                real en vez de píxeles quemados. */}
+            <Logotype
+              className="w-[min(84vw,900px)]"
+              priority
+              sizes="(max-width: 768px) 84vw, 900px"
+            />
+            <p className="mt-7 text-center text-[0.58rem] tracking-[0.5em] text-ink-dim uppercase sm:mt-9 sm:text-[0.72rem] sm:tracking-[0.62em]">
+              {t.brand.descriptor}
+            </p>
+            <p className="mt-4 text-center text-[0.55rem] tracking-[0.34em] text-ink-faint uppercase sm:mt-5 sm:text-[0.66rem] sm:tracking-[0.42em]">
+              {t.brand.claim}
+            </p>
           </div>
         </motion.div>
       </div>

@@ -29,8 +29,8 @@ export function Logotype({
     <Image
       src="/images/logo21-mark.png"
       alt="MOVA"
-      width={2354}
-      height={504}
+      width={2374}
+      height={514}
       sizes={sizes}
       priority={priority}
       className={`select-none ${className}`}
