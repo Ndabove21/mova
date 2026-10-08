@@ -35,8 +35,8 @@ export function Wordmark({
           x2="860"
           y2="230"
         >
-          <stop offset="0%" stopColor="var(--color-halo-deep)" />
-          <stop offset="14%" stopColor="var(--color-halo)" />
+          <stop offset="0%" stopColor="var(--color-blue-deep)" />
+          <stop offset="14%" stopColor="var(--color-blue)" />
           <stop offset="40%" stopColor="#fffaf2" />
           <stop offset="68%" stopColor="var(--color-gold)" />
           <stop offset="100%" stopColor="var(--color-gold-deep)" />
@@ -72,7 +72,7 @@ export function MarkGlyph({ className = "" }: { className?: string }) {
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true" fill="none">
       <defs>
         <linearGradient id={grad} x1="0.1" y1="0.9" x2="0.9" y2="0.1">
-          <stop offset="0%" stopColor="var(--color-halo)" />
+          <stop offset="0%" stopColor="var(--color-blue)" />
           <stop offset="45%" stopColor="#fffaf2" />
           <stop offset="100%" stopColor="var(--color-gold)" />
         </linearGradient>

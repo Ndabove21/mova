@@ -127,7 +127,7 @@ export function LogoSting({
         if (alfa <= 0.01) continue;
 
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-        const c = p.calida ? "228,178,122" : "166,198,226";
+        const c = p.calida ? "216,178,122" : "143,185,216";
         g.addColorStop(0, `rgba(${p.brillo ? "255,250,242" : c}, ${Math.min(1, alfa)})`);
         g.addColorStop(0.45, `rgba(${c}, ${alfa * 0.35})`);
         g.addColorStop(1, `rgba(${c}, 0)`);

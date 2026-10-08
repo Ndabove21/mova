@@ -2,19 +2,19 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/lib/site";
 import { getDictionary } from "@/i18n";
 
-import { Nav } from "@/components/layout/Nav";
+import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { Manifesto } from "@/components/sections/Manifesto";
+import { IntroSection } from "@/components/sections/IntroSection";
 import { Services } from "@/components/sections/Services";
-import { Work } from "@/components/sections/Work";
-import { Contact } from "@/components/sections/Contact";
+import { RealityMova } from "@/components/sections/RealityMova";
+import { SelectedWork } from "@/components/sections/SelectedWork";
+import { Immersive } from "@/components/sections/Immersive";
+import { Process } from "@/components/sections/Process";
+import { About } from "@/components/sections/About";
+import { FinalCTA } from "@/components/sections/FinalCTA";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ lang: string }>;
-}) {
+export default async function Page({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const t = getDictionary(lang);
@@ -22,13 +22,17 @@ export default async function Page({
   return (
     <>
       <span id="top" />
-      <Nav t={t} lang={lang} />
+      <Navbar t={t} lang={lang} />
       <main id="contenido">
         <Hero t={t} />
-        <Manifesto t={t} />
-        <Work t={t} lang={lang} />
+        <IntroSection t={t} />
         <Services t={t} />
-        <Contact t={t} lang={lang} />
+        <RealityMova t={t} />
+        <SelectedWork t={t} />
+        <Immersive t={t} />
+        <Process t={t} />
+        <About t={t} />
+        <FinalCTA t={t} />
       </main>
       <Footer t={t} lang={lang} />
     </>

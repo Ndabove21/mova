@@ -14,7 +14,7 @@ export default function NotFound() {
 
       <div className="relative">
         <Wordmark className="mx-auto w-[min(52vw,300px)]" title="MOVA" />
-        <p className="text-eclipse mt-12 text-[clamp(2.2rem,6vw,3.4rem)] leading-none tracking-[-0.035em]">
+        <p className="text-metal mt-12 font-serif text-[clamp(2.2rem,6vw,3.4rem)] leading-none">
           404
         </p>
         <p className="text-ink-dim mt-4 text-[1.0625rem]">
@@ -22,7 +22,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/es"
-          className="border-ink/25 text-ink hover:border-gold hover:text-gold mt-8 inline-block rounded-full border px-7 py-3 text-[12px] tracking-[0.16em] uppercase transition-colors"
+          className="border-line text-ink hover:border-gold hover:text-gold mt-10 inline-block rounded-full border px-7 py-3 text-[11px] tracking-[0.2em] uppercase transition-colors"
         >
           Inicio / Home
         </Link>

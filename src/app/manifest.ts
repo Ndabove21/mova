@@ -5,11 +5,11 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "MOVA — AI Creative Studio",
     short_name: "MOVA",
     description:
-      "Estudio creativo que produce video con inteligencia artificial.",
+      "AI creative studio. Films, commercials, visual worlds and digital characters.",
     start_url: "/es",
     display: "standalone",
-    background_color: "#030305",
-    theme_color: "#030305",
+    background_color: "#050505",
+    theme_color: "#050505",
     icons: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
   };
 }

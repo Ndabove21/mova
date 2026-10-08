@@ -1,6 +1,11 @@
-import type { Dictionary } from "./es";
-
-export const en: Dictionary = {
+/**
+ * Copy del sitio — inglés.
+ *
+ * Criterio bilingüe: las ETIQUETAS y los TITULARES quedan en inglés en las dos
+ * versiones (son lenguaje de marca: SERVICES, SELECTED WORK, CREATE BEYOND
+ * REALITY). Lo que se traduce son las FRASES y el formulario.
+ */
+export const en = {
   htmlLang: "en",
   localeLabel: "EN",
   otherLocaleLabel: "ES",
@@ -9,141 +14,199 @@ export const en: Dictionary = {
     title: "MOVA — AI Creative Studio",
     titleTemplate: "%s · MOVA",
     description:
-      "Creative studio producing video with artificial intelligence. Commercials, social content, music films and AI presenters — with the direction, craft and pacing of cinema.",
-    ogTitle: "MOVA — AI Creative Studio",
+      "AI creative studio. Films, commercials, visual worlds, digital characters and social content, produced with artificial intelligence and the craft of cinema.",
+    ogTitle: "MOVA — Create beyond reality.",
     ogDescription:
-      "The idea no longer waits for production. AI video, directed like film.",
+      "AI films, commercials, visual worlds and digital characters. A creative studio for a new reality.",
     keywords: [
       "AI creative studio",
-      "AI video production",
+      "AI film production",
       "AI commercials",
-      "generative video agency",
-      "AI music video",
-      "AI avatars",
-      "social video content",
+      "visual worlds",
+      "digital characters",
+      "generative video",
+      "social content",
       "MOVA",
     ],
   },
 
+  /* Etiquetas de marca — iguales en los dos idiomas */
+  brand: {
+    name: "MOVA",
+    descriptor: "AI CREATIVE STUDIO",
+    claim: "CREATE BEYOND REALITY.",
+  },
+
   nav: {
     links: [
-      { id: "trabajos", label: "Work" },
-      { id: "servicios", label: "Services" },
+      { id: "work", label: "WORK" },
+      { id: "services", label: "SERVICES" },
+      { id: "about", label: "ABOUT" },
     ],
-    cta: "Get in touch",
+    contact: "CONTACT",
+    cta: "START A PROJECT",
     menu: "Menu",
     close: "Close",
   },
 
   hero: {
-    eyebrow: "AI Creative Studio",
-    title: ["The idea no longer waits", "for production."],
+    index: "01",
+    showreel: "WATCH SHOWREEL",
+    tags: ["FILMS", "COMMERCIALS", "VISUAL WORLDS", "AI CONTENT"],
+    scroll: "SCROLL",
+    pause: "PAUSE",
+    play: "PLAY",
+  },
+
+  intro: {
+    eyebrow: "WE CREATE",
+    title: ["WHAT DOESN'T", "EXIST."],
     body:
-      "We produce video with artificial intelligence. The direction, craft and pacing of cinema — at a speed and cost no traditional production house can match.",
-    ctaPrimary: "See the work",
-    ctaSecondary: "Start a project",
-    scroll: "Scroll",
-    pause: "Pause",
-    play: "Play",
-    soundOn: "Sound",
-    soundOff: "Mute",
-  },
-
-  manifesto: {
-    eyebrow: "Manifesto",
-    statement: ["Everything you see", "begins in black."],
-    body: [
-      "A black screen used to mean a budget, six weeks of shooting and twenty people in sync. Today it can mean a clear direction and a machine that listens.",
-      "We chose the second — held to the standards of the first. The tool changed. The bar did not.",
-    ],
-  },
-
-  work: {
-    eyebrow: "Work",
-    title: "Selected",
-    lead: "Recent pieces.",
-    play: "Play",
-    close: "Close",
-    empty: "Coming soon.",
-    soon: "Coming soon",
-    cta: "Want to see the full reel?",
-    ctaLink: "Ask on WhatsApp",
+      "We combine creative direction, artificial intelligence and motion to build visual experiences that traditional production cannot reach.",
+    cta: "PLAY VIDEO",
   },
 
   services: {
-    eyebrow: "Services",
-    title: "What we do",
-    lead: "Six ways to use the same tool.",
+    index: "02",
+    label: "SERVICES",
+    subtitle: ["FROM IDEA TO IMAGE.", "FROM IMAGE TO MOTION."],
     items: [
       {
-        title: "Commercials & campaigns",
-        body: "From approved brief to delivered master in days, not months.",
+        title: "AI FILMS",
+        body: "Short films and brand pieces with direction, script and a look that holds shot to shot.",
       },
       {
-        title: "Social content",
-        body: "Ten variants of one idea, so you learn what works before the media spend.",
+        title: "COMMERCIALS",
+        body: "Full spots, from approved brief to delivered master — in days, not months.",
       },
       {
-        title: "Music films & art pieces",
-        body: "Where AI stops imitating cinema and starts doing something else.",
+        title: "VISUAL WORLDS",
+        body: "Impossible locations, other eras, scales that never fit inside a shooting budget.",
       },
       {
-        title: "Avatars & presenters",
-        body: "Consistent faces that speak your language, with no casting call.",
+        title: "DIGITAL CHARACTERS",
+        body: "Consistent faces that speak your language, with no casting call and no set.",
       },
       {
-        title: "Art direction & look dev",
-        body: "Palette, lens, grain and light decided before the first frame exists.",
-      },
-      {
-        title: "Post & finishing",
-        body: "Edit, colour, sound and score. What turns footage into a piece.",
+        title: "SOCIAL CONTENT",
+        body: "Vertical at volume. Ten variants of one idea, so you learn what works before the spend.",
       },
     ],
   },
 
+  reality: {
+    index: "03",
+    label: "REALITY → MOVA",
+    lines: ["SAME IDEA.", "A DIFFERENT UNIVERSE."],
+    realityLabel: "REALITY",
+    generatedLabel: "GENERATED",
+    hint: "Drag to compare",
+    sliderLabel: "Comparison between the real shot and the generated version",
+  },
+
+  work: {
+    index: "04",
+    label: "SELECTED WORK",
+    meta: "AI — FILMS — COMMERCIALS — VISUAL WORLDS",
+    viewAll: "VIEW ALL",
+    play: "PLAY",
+    close: "CLOSE",
+    soon: "COMING SOON",
+  },
+
+  immersive: {
+    index: "05",
+    label: "IMMERSIVE EXPERIENCES",
+    title: ["IDEAS", "INTO", "WORLDS."],
+    body:
+      "We turn imagination into cinematic worlds, characters and visual experiences that do not exist anywhere else.",
+    cta: "EXPLORE",
+  },
+
+  process: {
+    index: "06",
+    label: "HOW WE CREATE",
+    steps: [
+      { title: "IDEA", body: "A thirty-minute call. What you want to say, to whom, and by when." },
+      { title: "GENERATE", body: "Moodboard, script and a locked look before a single frame exists." },
+      { title: "REFINE", body: "We iterate in the open. Changing your mind no longer costs a shooting day." },
+      { title: "ANIMATE", body: "Motion, camera and rhythm. Where the footage becomes a film." },
+      { title: "DELIVER", body: "Master plus cutdowns for every platform. The files are yours." },
+    ],
+  },
+
+  about: {
+    index: "07",
+    label: "ABOUT",
+    title: ["A CREATIVE STUDIO", "FOR A NEW REALITY."],
+    body:
+      "We explore the space between imagination and reality to create visual content that inspires, connects and outlives the brief.",
+    cta: "OUR APPROACH",
+  },
+
+  finalCta: {
+    index: "08",
+    title: ["LET'S CREATE", "BEYOND REALITY."],
+    cta: "START A PROJECT",
+  },
+
+  footer: {
+    studio: "STUDIO",
+    social: "SOCIAL",
+    rights: "© 2026 MOVA. CREATE BEYOND REALITY.",
+    backToTop: "BACK TO TOP",
+  },
+
   contact: {
-    eyebrow: "Contact",
-    title: "Let's make something",
+    label: "START A PROJECT",
+    title: ["TELL US", "WHAT YOU SEE."],
     lead:
-      "Tell us what you have in mind. If there's a project in it, you'll hear back within 24 hours with an idea and a number.",
+      "Tell us what you have in mind. If there is a project in it, you will hear back within 24 hours with an idea and a number.",
     form: {
-      name: "Name",
+      name: "NAME",
       namePlaceholder: "What we should call you",
-      email: "Email",
+      email: "EMAIL",
       emailPlaceholder: "where-we-reply@mail.com",
-      company: "Company / project",
+      company: "COMPANY / PROJECT",
       companyPlaceholder: "Optional",
-      type: "What you need",
+      type: "WHAT YOU NEED",
       typeOptions: [
-        "Commercial or campaign",
+        "AI film",
+        "Commercial",
+        "Visual world",
+        "Digital character",
         "Social content",
-        "Music film or art piece",
-        "Avatar or presenter",
         "Not sure yet",
       ],
-      message: "Tell us a little",
-      messagePlaceholder:
-        "What you want to say, who you're talking to and when you need it.",
-      submit: "Send",
-      submitting: "Sending…",
-      success: "Done. You'll hear from us within 24 hours.",
-      error: "That didn't go through. Message us on WhatsApp and we'll sort it.",
+      message: "TELL US A LITTLE",
+      messagePlaceholder: "What you want to say, who you are talking to and when you need it.",
+      submit: "SEND",
+      submitting: "SENDING…",
+      success: "Done. You will hear from us within 24 hours.",
+      error: "That did not go through. Message us on WhatsApp and we will sort it.",
       required: "This field is required",
       invalidEmail: "Check the email address",
       tooShort: "Tell us a bit more",
     },
-    whatsapp: "Message on WhatsApp",
+    whatsapp: "WHATSAPP",
     whatsappMessage: "Hi MOVA — I found you on the site and want to talk about a project.",
     or: "or",
-    emailLabel: "Email",
+    close: "CLOSE",
   },
 
-  footer: {
-    tagline: "AI Creative Studio",
-    claim: "Create beyond reality.",
-    rights: "All rights reserved.",
-    backToTop: "Back to top",
-    social: "Follow",
+  cursor: {
+    play: "PLAY",
+    view: "VIEW",
+    explore: "EXPLORE",
+    watch: "WATCH",
+    drag: "DRAG",
+  },
+
+  a11y: {
+    skip: "Skip to content",
+    openContact: "Open the contact form",
+    placeholderNote: "Placeholder image",
   },
 };
+
+export type Dictionary = typeof en;

@@ -23,7 +23,7 @@ export default async function OgImage({
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#030305",
+          background: "#050505",
           position: "relative",
           padding: 72,
         }}
@@ -38,7 +38,7 @@ export default async function OgImage({
             height: 760,
             borderRadius: 999,
             background:
-              "radial-gradient(circle, rgba(228,178,122,0.30) 0%, rgba(228,178,122,0.06) 45%, rgba(3,3,5,0) 70%)",
+              "radial-gradient(circle, rgba(216,178,122,0.30) 0%, rgba(216,178,122,0.06) 45%, rgba(5,5,5,0) 70%)",
           }}
         />
         {/* Resplandor frío, abajo a la izquierda */}
@@ -51,7 +51,7 @@ export default async function OgImage({
             height: 700,
             borderRadius: 999,
             background:
-              "radial-gradient(circle, rgba(166,198,226,0.20) 0%, rgba(166,198,226,0.04) 45%, rgba(3,3,5,0) 70%)",
+              "radial-gradient(circle, rgba(143,185,216,0.20) 0%, rgba(143,185,216,0.04) 45%, rgba(5,5,5,0) 70%)",
           }}
         />
 
@@ -64,10 +64,10 @@ export default async function OgImage({
             width: 440,
             height: 440,
             borderRadius: 999,
-            border: "3px solid rgba(228,178,122,0.55)",
+            border: "3px solid rgba(216,178,122,0.55)",
             boxShadow:
-              "0 0 60px rgba(228,178,122,0.28), inset 0 0 90px rgba(3,3,5,1)",
-            background: "#040406",
+              "0 0 60px rgba(216,178,122,0.28), inset 0 0 90px rgba(5,5,5,1)",
+            background: "#050505",
           }}
         />
 
@@ -77,11 +77,11 @@ export default async function OgImage({
           <svg width="420" height="115" viewBox="0 0 875 240" fill="none">
             <defs>
               <linearGradient id="m" x1="0" y1="0.1" x2="1" y2="0.9">
-                <stop offset="0%" stopColor="#46637e" />
-                <stop offset="14%" stopColor="#a6c6e2" />
+                <stop offset="0%" stopColor="#456b85" />
+                <stop offset="14%" stopColor="#8fb9d8" />
                 <stop offset="40%" stopColor="#fffaf2" />
-                <stop offset="68%" stopColor="#e4b27a" />
-                <stop offset="100%" stopColor="#a96c2e" />
+                <stop offset="68%" stopColor="#d8b27a" />
+                <stop offset="100%" stopColor="#9a7338" />
               </linearGradient>
             </defs>
             <g stroke="url(#m)" strokeWidth="20" strokeLinejoin="miter" strokeMiterlimit="12">
@@ -96,7 +96,7 @@ export default async function OgImage({
           <div
             style={{
               marginTop: 26,
-              color: "rgba(244,239,232,0.62)",
+              color: "rgba(242,240,234,0.62)",
               fontSize: 22,
               letterSpacing: 14,
               textTransform: "uppercase",
@@ -108,13 +108,15 @@ export default async function OgImage({
           <div
             style={{
               marginTop: 34,
-              color: "#f4efe8",
-              fontSize: 42,
+              color: "#f2f0ea",
+              fontSize: 40,
+              letterSpacing: 6,
+              textTransform: "uppercase",
               lineHeight: 1.18,
               maxWidth: 900,
             }}
           >
-            {`${t.hero.title[0]} ${t.hero.title[1]}`}
+            {t.brand.claim}
           </div>
         </div>
       </div>

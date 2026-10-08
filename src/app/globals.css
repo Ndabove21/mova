@@ -1,44 +1,39 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   MOVA — tokens de marca
-   Derivados del isologo: un eclipse. Disco negro, borde de luz cálida (oro)
-   del lado derecho, borde frío (halo) del izquierdo.
-
-   Una sola familia tipográfica para todo el sitio. Lo que ordena la página no
-   es el contraste entre dos letras sino el contraste de escala: una etiqueta
-   de 10px al lado de una frase de 8rem, y mucho vacío entre las dos.
+   MOVA — sistema visual
+   Negro cinematográfico. El oro y el azul son ILUMINACIÓN, no relleno: sólo
+   aparecen como canto de luz, acento de hover o foco. Nunca como fondo.
    ========================================================================== */
 
 @theme {
-  /* Vacío */
-  --color-void:       #030305;
-  --color-void-2:     #08080c;
-  --color-void-3:     #101018;
+  /* Negros */
+  --color-black:     #050505;
+  --color-black-2:   #080808;
+  --color-black-3:   #0b0b0b;
 
   /* Tinta */
-  --color-ink:        #f4efe8;
-  --color-ink-dim:    rgba(244, 239, 232, 0.70);
-  --color-ink-faint:  rgba(244, 239, 232, 0.56);
-  --color-line:       rgba(244, 239, 232, 0.10);
-  --color-line-soft:  rgba(244, 239, 232, 0.055);
+  --color-ink:       #f2f0ea;
+  --color-ink-dim:   rgba(242, 240, 234, 0.70);
+  --color-ink-faint: rgba(242, 240, 234, 0.55);
+  --color-gray:      #777777;
+  --color-line:      rgba(242, 240, 234, 0.10);
+  --color-line-soft: rgba(242, 240, 234, 0.055);
 
-  /* Luz cálida — el canto derecho del eclipse */
-  --color-gold:       #e4b27a;
-  --color-gold-deep:  #a96c2e;
+  /* Luz */
+  --color-gold:      #d8b27a;
+  --color-gold-deep: #9a7338;
+  --color-silver:    #bfc5cc;
+  --color-blue:      #8fb9d8;
+  --color-blue-deep: #456b85;
 
-  /* Luz fría — el canto izquierdo */
-  --color-halo:       #a6c6e2;
-  --color-halo-deep:  #46637e;
-
-  --color-steel:      #72808e;
-
-  /* Una sola familia. Schibsted Grotesk: grotesca calma, con el carácter
-     suficiente para sostener una frase a 8rem sin pedir atención. */
-  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  /* Tipografía */
+  --font-sans:  var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-bodoni), ui-serif, Georgia, serif;
 
   /* Ritmo */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-cine:     cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ==========================================================================
@@ -49,7 +44,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--color-void);
+  background: var(--color-black);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-weight: 400;
@@ -62,37 +57,33 @@ html {
   scroll-behavior: auto;
   overflow-x: hidden;
 }
-
 body {
   overflow-x: hidden;
 }
 
 ::selection {
   background: var(--color-gold);
-  color: var(--color-void);
+  color: var(--color-black);
 }
-
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
 }
 
-/* Foco visible — obligatorio, nunca lo saquemos */
 :focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
-/* Saltar al contenido */
 .skip-link {
   position: absolute;
   left: 1rem;
   top: -4rem;
-  z-index: 200;
+  z-index: 300;
   padding: 0.75rem 1.25rem;
   background: var(--color-ink);
-  color: var(--color-void);
+  color: var(--color-black);
   font-size: 0.8125rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -103,91 +94,157 @@ body {
 }
 
 /* ==========================================================================
+   Cursor
+   El nativo se oculta SÓLO donde hay puntero fino y el sistema no pidió menos
+   movimiento: en touch no hay cursor que reemplazar, y sin él la página
+   quedaría sin ningún indicador.
+   ========================================================================== */
+
+@media (pointer: fine) {
+  html.cursor-activo,
+  html.cursor-activo * {
+    cursor: none !important;
+  }
+}
+
+.cursor-punto,
+.cursor-anillo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 250;
+  pointer-events: none;
+  border-radius: 9999px;
+  will-change: transform;
+}
+.cursor-punto {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  background: var(--color-ink);
+}
+.cursor-anillo {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  margin: -25px 0 0 -25px;
+  border: 1px solid rgba(242, 240, 234, 0.55);
+  background: rgba(242, 240, 234, 0.04);
+  backdrop-filter: blur(2px);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  opacity: 0;
+  transform: scale(0.3);
+  transition:
+    opacity 0.35s var(--ease-out-expo),
+    transform 0.35s var(--ease-out-expo),
+    width 0.35s var(--ease-out-expo),
+    height 0.35s var(--ease-out-expo);
+}
+.cursor-anillo[data-activo="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+.cursor-anillo[data-modo="media"] {
+  width: 92px;
+  height: 92px;
+  margin: -46px 0 0 -46px;
+  border-color: rgba(216, 178, 122, 0.6);
+}
+
+/* ==========================================================================
    Utilidades de marca
    ========================================================================== */
 
-/* El degradé metálico del logo sobre texto. Se usa UNA sola vez en todo el
-   sitio —la segunda línea del titular del hero— y es el único momento en que
-   una letra no es simplemente tinta sobre negro. */
-.text-eclipse {
+/* Metal del isologo: plata fría → brillo → oro. Se usa con cuentagotas. */
+.text-metal {
   background: linear-gradient(
     100deg,
-    var(--color-halo-deep) 0%,
-    var(--color-halo) 16%,
-    #fffaf2 42%,
-    var(--color-gold) 68%,
+    #8fa6b8 0%,
+    #cfdbe6 14%,
+    #ffffff 34%,
+    #e9e5df 49%,
+    var(--color-gold) 74%,
+    #f6ddb8 90%,
     var(--color-gold-deep) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Filete: separador de 1px que respira en los extremos */
 .hairline {
   height: 1px;
   background: linear-gradient(
     to right,
     transparent,
-    var(--color-line) 12%,
-    var(--color-line) 88%,
+    var(--color-line) 10%,
+    var(--color-line) 90%,
     transparent
   );
 }
 
-/* Halos difusos de fondo */
 .glow-gold {
   background: radial-gradient(
     closest-side,
-    rgba(228, 178, 122, 0.22),
-    rgba(228, 178, 122, 0.06) 55%,
+    rgba(216, 178, 122, 0.22),
+    rgba(216, 178, 122, 0.06) 55%,
     transparent 100%
   );
 }
-.glow-halo {
+.glow-blue {
   background: radial-gradient(
     closest-side,
-    rgba(166, 198, 226, 0.16),
-    rgba(166, 198, 226, 0.04) 55%,
+    rgba(143, 185, 216, 0.16),
+    rgba(143, 185, 216, 0.04) 55%,
     transparent 100%
   );
 }
 
-/* Grano de película — sutil, encima de todo, sin capturar el mouse */
+/* Grano de película y viñeta: lo que hace que todo lea como proyección */
 .grain::after {
   content: "";
   position: fixed;
   inset: -50%;
   pointer-events: none;
-  z-index: 100;
-  opacity: 0.05;
+  z-index: 200;
+  opacity: 0.045;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
   animation: grainShift 0.7s steps(2) infinite;
 }
-
 @keyframes grainShift {
   0%   { transform: translate(0, 0); }
   50%  { transform: translate(-2%, 1.5%); }
   100% { transform: translate(1.5%, -1%); }
 }
 
-/* Viñeta: cierra los bordes como un cuadro proyectado */
 .vignette::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 90;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 48%,
-    rgba(3, 3, 5, 0.55) 100%
-  );
+  z-index: 190;
+  background: radial-gradient(ellipse at center, transparent 46%, rgba(5, 5, 5, 0.6) 100%);
+}
+
+/* Imagen en clave cinematográfica: el hover la devuelve a la vida */
+.img-cine {
+  filter: saturate(0.82) contrast(1.06) brightness(0.92);
+  transition:
+    filter 1.2s var(--ease-cine),
+    transform 1.6s var(--ease-cine);
+}
+.group:hover .img-cine {
+  filter: saturate(1) contrast(1.02) brightness(1);
+  transform: scale(1.05);
 }
 
 /* ==========================================================================
    Animaciones
-   Queda lo que sostiene al eclipse y lo que hace entrar al texto. Nada más.
    ========================================================================== */
 
 @keyframes scrollHint {
@@ -201,11 +258,11 @@ body {
 }
 
 @keyframes rimDrift {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 .animate-rim {
-  animation: rimDrift 46s linear infinite;
+  animation: rimDrift 52s linear infinite;
 }
 
 @keyframes breathe {
@@ -213,19 +270,30 @@ body {
   50%      { opacity: 1; }
 }
 .animate-breathe {
-  animation: breathe 5s ease-in-out infinite;
+  animation: breathe 6s ease-in-out infinite;
 }
 
-/* — Revelados —
-   Un solo IntersectionObserver (layout/Reveals.tsx) le pone .is-revealed a
-   cualquier cosa con [data-reveal]; el movimiento es todo CSS. */
+/* Reflejo que cruza el isologo (primitives/LogoSting.tsx) */
+.sting-sweep {
+  animation: stingSweep 5.4s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+}
+.sting-sweep.is-paused {
+  animation-play-state: paused;
+}
+@keyframes stingSweep {
+  0%   { transform: translateX(0); }
+  62%  { transform: translateX(1260px); }
+  100% { transform: translateX(1260px); }
+}
 
+/* Revelados por IntersectionObserver (layout/Reveals.tsx) — para lo que no
+   necesita Framer Motion. El movimiento vive en CSS. */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(24px);
   transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 0.9s var(--ease-out-expo);
+    opacity 1s var(--ease-cine),
+    transform 1s var(--ease-cine);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -233,19 +301,21 @@ body {
   opacity: 1;
   transform: none;
 }
-
-/* Línea de titular: entra desde abajo del renglón, no desde el costado. */
-[data-reveal="line"] {
-  transform: translateY(0.62em);
-  transition-duration: 0.95s;
+[data-reveal="blur"] {
+  filter: blur(10px);
+  transition:
+    opacity 1.2s var(--ease-cine),
+    transform 1.2s var(--ease-cine),
+    filter 1.2s var(--ease-cine);
 }
-
-/* Filete: se dibuja, no aparece. */
+[data-reveal="blur"].is-revealed {
+  filter: none;
+}
 [data-reveal="rule"] {
   opacity: 1;
   transform: scaleX(0);
   transform-origin: left center;
-  transition: transform 1.3s var(--ease-out-expo);
+  transition: transform 1.4s var(--ease-cine);
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-reveal="rule"].is-revealed {
@@ -257,21 +327,13 @@ body {
    ========================================================================== */
 
 html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
+html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
 
 /* ==========================================================================
-   Respetar prefers-reduced-motion
+   prefers-reduced-motion
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -286,28 +348,112 @@ html.lenis body {
   [data-reveal] {
     opacity: 1;
     transform: none;
+    filter: none;
   }
-  .grain::after {
-    animation: none;
+  .grain::after { animation: none; }
+  .sting-sweep { animation: none; opacity: 0; }
+  .text-metal {
+    background: none;
+    color: var(--color-ink);
+    -webkit-text-fill-color: var(--color-ink);
   }
 }
 
-/* — Reflejo del isologo (ver primitives/LogoSting.tsx) —
-   Transform de CSS sobre un elemento SVG: las unidades son las del viewBox,
-   y el navegador lo compone en la GPU sin tocar el layout. */
-.sting-sweep {
-  animation: stingSweep 5.4s cubic-bezier(0.55, 0, 0.45, 1) infinite;
-}
-.sting-sweep.is-paused {
-  animation-play-state: paused;
+/* ==========================================================================
+   Mosaico de vidrio (ver primitives/GlassTiles.tsx)
+
+   Cada pieza es un panel traslúcido con bisel: un canto claro arriba a la
+   izquierda y uno oscuro abajo a la derecha, que es lo que la hace leer como
+   vidrio y no como un rectángulo de color. Encima, dos capas:
+     ::before  el destello que recorre el mosaico en diagonal
+     ::after   la luz del puntero, que escribe el JS en --gt-lit
+   ========================================================================== */
+
+.gt-tile {
+  position: relative;
+  overflow: hidden;
+  opacity: var(--gt-base, 0.6);
+  background: linear-gradient(
+    135deg,
+    rgba(242, 240, 234, 0.075) 0%,
+    rgba(242, 240, 234, 0.018) 42%,
+    rgba(5, 5, 5, 0) 100%
+  );
+  /* Dos cantos: uno claro arriba-izquierda y uno oscuro abajo-derecha. El
+     bisel es lo único que separa una pieza de vidrio de un rectángulo de
+     color, así que tiene que verse. */
+  box-shadow:
+    inset 1px 1px 0 rgba(242, 240, 234, 0.13),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.6),
+    inset 0 0 24px rgba(242, 240, 234, 0.025);
 }
 
-@keyframes stingSweep {
-  0%   { transform: translateX(0); }
-  62%  { transform: translateX(1260px); }
-  100% { transform: translateX(1260px); }
+.gt-tile::before,
+.gt-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Destello: entra rápido y se apaga lento, como un reflejo que pasa. */
+.gt-tile::before {
+  background: linear-gradient(
+    140deg,
+    rgba(var(--gt-tint), 0.52) 0%,
+    rgba(var(--gt-tint), 0.14) 36%,
+    transparent 68%
+  );
+  opacity: 0;
+  animation: gtShimmer 9s var(--gt-delay, 0s) ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes gtShimmer {
+  0%   { opacity: 0; }
+  7%   { opacity: 1; }
+  26%  { opacity: 0.18; }
+  55%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Luz del puntero: el canto superior izquierdo se enciende más que el resto,
+   que es como se comporta un bisel real contra una fuente puntual. */
+.gt-tile::after {
+  background:
+    linear-gradient(135deg, rgba(var(--gt-tint), 0.55) 0%, rgba(var(--gt-tint), 0.08) 55%, transparent 80%);
+  opacity: calc(var(--gt-lit, 0) * 0.9);
+  transition: opacity 420ms var(--ease-out-expo);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sting-sweep { animation: none; opacity: 0; }
+  .gt-tile::before {
+    animation: none;
+    opacity: 0.1;
+  }
+  .gt-tile::after {
+    transition: none;
+  }
+}
+
+/* Etiqueta de media placeholder (ver primitives/PlaceholderTag.tsx).
+   El nombre entra por `content` y no como texto del DOM: así no cuenta como
+   texto visible del <button> que a veces la contiene. */
+.ph-tag {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 20;
+  pointer-events: none;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 0.125rem 0.375rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: -0.01em;
+  color: rgba(242, 240, 234, 0.45);
+  backdrop-filter: blur(4px);
+}
+.ph-tag::after {
+  content: attr(data-ph);
 }

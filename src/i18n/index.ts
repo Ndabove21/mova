@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/site";
-import { es, type Dictionary } from "./es";
-import { en } from "./en";
+import { en, type Dictionary } from "./en";
+import { es } from "./es";
 
 const dictionaries: Record<Locale, Dictionary> = { es, en };
 
