@@ -26,12 +26,16 @@ export type Work = {
 
 export const WORKS: Work[] = [
   {
-    // MATERIAL REAL del cliente (media/publicidad-modulos-master.mov).
-    // El título sale del nombre que le puso él al archivo; si el proyecto
-    // tiene nombre de marca, va acá.
-    id: "modulos",
+    // MATERIAL REAL del cliente (media/publicidad-modulos-master.mov):
+    // una campaña de módulos habitacionales.
+    //
+    // El título vende la fantasía y no el producto, que es lo que hace la
+    // pieza: no se ve un catálogo de módulos, se ve a alguien tomando café
+    // frente a un lago. "MÓDULOS" describía el objeto; esto describe lo que
+    // compra el cliente final. Si la campaña ya tiene nombre de marca, va acá.
+    id: "habitar-el-bosque",
     n: "01",
-    title: "MÓDULOS",
+    title: "HABITAR EL BOSQUE",
     cats: [1, 2],
     year: 2026,
     image: "/images/work-01.jpg",
@@ -40,25 +44,26 @@ export const WORKS: Work[] = [
     full: { kind: "file", src: "/videos/showreel.mp4" },
   },
   {
-    id: "the-next-icon",
+    // Placeholder: pieza de relleno hasta que entre trabajo real.
+    id: "el-proximo-icono",
     n: "02",
-    title: "THE NEXT ICON",
+    title: "EL PRÓXIMO ÍCONO",
     cats: [1],
     year: 2026,
     image: "/images/work-02.jpg",
   },
   {
-    id: "human-ai",
+    id: "humano-ia",
     n: "03",
-    title: "HUMAN / AI",
+    title: "HUMANO / IA",
     cats: [3],
     year: 2026,
     image: "/images/work-03.jpg",
   },
   {
-    id: "beyond-spaces",
+    id: "espacios-imposibles",
     n: "04",
-    title: "BEYOND SPACES",
+    title: "ESPACIOS IMPOSIBLES",
     cats: [2],
     year: 2026,
     image: "/images/work-04.jpg",
