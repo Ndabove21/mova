@@ -59,9 +59,12 @@ versiones del sitio — es parte de la marca, no un texto a traducir.
 (trazos monolineales geométricos, no una imagen). Se ve nítido en cualquier
 tamaño y hereda los tokens de color.
 
-> ⚠️ Es una reconstrucción a partir del PNG. Si existe el original en SVG/AI,
-> reemplazalo y actualizá también `src/app/icon.svg` y el `<svg>` embebido en
-> `src/app/[lang]/opengraph-image.tsx`.
+> ⚠️ Es una reconstrucción y **no reproduce las letras reales**. La versión en
+> alta que mandó el cliente (`media/mova-logo-alta-damero.jpg`) muestra que su
+> M tiene el vértice del medio redondeado, no en punta, y que la A no lleva
+> barra transversal. Con un archivo limpio se puede redibujar fiel; habría que
+> actualizar también `src/app/icon.svg`, el `<svg>` de
+> `src/app/[lang]/opengraph-image.tsx` y `LogoSting.tsx`.
 
 ---
 
@@ -132,53 +135,34 @@ y no en inglés, no compila.
 
 ### La recepción
 
-El sitio **abre con el isologo animado a pantalla completa**. Es la primera
-pantalla entera: el video ya trae la marca, el descriptor y el claim, así que
-no hay nada de HTML encima — repetirlo sería decir dos veces lo mismo.
+El sitio **abre con el isologo a pantalla completa**, renderizado en vectores
+(`src/components/primitives/LogoSting.tsx`). Es la primera pantalla entera:
+trazo metálico, un reflejo que lo cruza y partículas en canvas derivando por
+detrás. Abajo, el descriptor y el claim.
 
-El video queda fijo (`sticky`) durante la primera pantalla y media. La frase
-del estudio entra montada sobre él mientras un velo negro sube con el scroll,
-hasta apagarlo del todo justo cuando arranca el manifiesto: *"todo lo que ves
-empieza en negro"*.
+Después queda fijo (`sticky`) durante la primera pantalla y media: la frase del
+estudio entra montada encima mientras un velo negro sube con el scroll, hasta
+apagarlo justo cuando arranca el manifiesto — *"todo lo que ves empieza en
+negro"*.
 
-Archivos:
+**Por qué renderizado y no el video del cliente.** El master del isologo
+animado es 1280×720 y el hero lo pintaba a 2880 px físicos en una pantalla
+retina: 2,25× de escalado, y se veía blando. No era la compresión —los
+derivados daban SSIM 0,993 contra el master—, era la resolución de origen.
+Renderizarlo resuelve las tres cosas a la vez:
 
-| Ruta | Qué es |
-|---|---|
-| `media/mova-logo-sting-source.mp4` | Master que mandó el cliente (3,6 MB, con audio). No se sirve. |
-| `public/video/hero.webm` | VP9 + Opus, 1,2 MB — el que usan Chrome y Firefox |
-| `public/video/hero.mp4` | H.264 + AAC, 1,7 MB — Safari y el resto |
-| `public/img/hero-poster.jpg` | Lo que se ve mientras carga |
+- **Nítido a cualquier densidad.** Son trazos y gradientes, no píxeles.
+- **1,2 MB menos.** La home pasó de ~1,5 MB a ~250 KB.
+- **El descriptor y el claim son texto de verdad**, no píxeles quemados: ahora
+  los lee Google y los lee un lector de pantalla.
 
-Para cambiarlo, pisá los tres archivos y listo (las rutas viven en
-`src/lib/site.ts`). Comandos usados:
+El master sigue en `media/` con sus notas. Si algún día llega uno en 2560 o
+3840, volver al video es cambiar `HERO_MODE` a `"video"` y regenerar los
+derivados — las instrucciones están en `src/lib/site.ts`.
 
-```bash
-ffmpeg -i master.mp4 -c:v libx264 -crf 25 -preset slow -c:a aac -b:a 96k \
-  -movflags +faststart public/video/hero.mp4
-ffmpeg -i master.mp4 -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 \
-  -c:a libopus -b:a 80k public/video/hero.webm
-```
-
-**Presupuesto de peso:** el video se descarga en toda visita. 1,2 MB está bien;
-arriba de ~3 MB conviene recortar la duración antes que bajar la calidad —el
-degradé metálico del logotipo es justo lo que peor comprime—.
-
-Detalles que importan:
-- `object-contain`, no `cover`: el logotipo ocupa casi todo el ancho del cuadro
-  y recortar para llenar la pantalla se comería las letras de los costados.
-  Como el fondo del video y el de la página son el mismo negro, las bandas no
-  se notan.
-- El elemento `<video>` mide exactamente la banda 16:9 y lleva una máscara que
-  funde el canto superior e inferior. Sin eso, en un teléfono vertical el video
-  se ve como una caja pegada sobre el fondo.
-- Arranca **mudo** (lo exigen los navegadores) con botones de **pausa** y
-  **sonido**. El de pausa no es decorativo: WCAG 2.2.2 pide poder detener
-  cualquier contenido en movimiento que arranque solo y dure más de 5s.
-- Se pausa solo cuando sale de pantalla, y no autoarranca con
-  `prefers-reduced-motion`.
-
-El hero funciona sin video: poné `HERO_VIDEO = null` y queda la frase sola.
+El reflejo y las partículas se detienen con el botón de pausa (WCAG 2.2.2) y no
+arrancan con `prefers-reduced-motion`; el canvas además se congela cuando la
+recepción sale de pantalla.
 
 ### Portfolio
 
@@ -231,7 +215,8 @@ usuario a WhatsApp. Configurar Resend antes de publicar.
       (WhatsApp, mail, Instagram, dominio).
 - [ ] **Resend** configurado y probado con un envío real.
 - [ ] **Videos del portfolio** cargados (hoy son 6 slots con `placeholder: true`).
-- [ ] **Reel real** si además del isologo animado quieren mostrar trabajo en la recepción.
+- [ ] **Logo limpio** — ver `media/LEEME.md`. Sobre fondo negro sólido, PNG con
+      alfa real o, mejor, el vectorial. El que hay tiene el damero quemado.
 - [ ] **Logo original** en vectorial, si existe.
 - [ ] `SITE_URL` apuntando al dominio definitivo (afecta canonical, hreflang, OG y sitemap).
 
@@ -240,8 +225,8 @@ usuario a WhatsApp. Configurar Resend antes de publicar.
 ## Calidad verificada
 
 - Build de producción limpio, TypeScript estricto sin errores.
-- Peso de la home: ~1,5 MB comprimido, de los cuales 1,2 MB son el video de
-  recepción. Sin el video: ~250 KB (163 KB de JS, 46 KB de fuentes).
+- Peso de la home: ~250 KB comprimido (164 KB de JS, 46 KB de fuentes). Sin video.
+- La recepción corre a 60 fps.
 - **axe-core: 0 violaciones** WCAG 2.1 A/AA en `/es` y `/en`, desktop y mobile.
 - Sin scroll horizontal en 390 / 768 / 1440 px.
 - Navegación por teclado completa, skip link y foco visible en todo elemento interactivo.

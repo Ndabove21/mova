@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary } from "@/i18n";
-import { HERO_VIDEO, HERO_POSTER } from "@/lib/site";
+import { HERO_MODE, HERO_VIDEO, HERO_POSTER } from "@/lib/site";
 import { LineReveal } from "@/components/primitives/motion";
+import { LogoSting } from "@/components/primitives/LogoSting";
 
 /**
  * La recepción.
@@ -17,10 +18,14 @@ import { LineReveal } from "@/components/primitives/motion";
  * subiendo hasta apagarlo del todo. Para cuando arranca el manifiesto —"todo
  * lo que ves empieza en negro"— la pantalla, efectivamente, es negra.
  *
- * `object-contain` y no `cover`: el logotipo ocupa casi todo el ancho del
- * cuadro, así que recortar para llenar la pantalla se comería las letras de
- * los costados. Como el fondo del video es negro puro y el de la página
- * también, las bandas no se ven.
+ * La recepción se resuelve de dos maneras, según `HERO_MODE`:
+ *
+ *   "render" — el isologo dibujado en vectores. Es lo que está activo: el
+ *              master del video es 1280×720 y acá se pintaba a 2880 px
+ *              físicos, así que se ablandaba.
+ *   "video"  — el archivo del cliente. `object-contain` y no `cover`: el
+ *              logotipo ocupa casi todo el ancho del cuadro y recortar para
+ *              llenar la pantalla se comería las letras de los costados.
  */
 export function Hero({ t }: { t: Dictionary }) {
   const section = useRef<HTMLElement>(null);
@@ -30,14 +35,24 @@ export function Hero({ t }: { t: Dictionary }) {
   const controls = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  const esVideo = HERO_MODE === "video" && Boolean(HERO_VIDEO);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
+  /** Sólo para el isologo renderizado: detiene partículas y reflejo. */
+  const [stingPausado, setStingPausado] = useState(false);
+  /** Con movimiento reducido el isologo ya nace quieto: un botón de pausa ahí
+   *  miente. Se resuelve en el cliente, así que arranca en false. */
+  const [hayMovimiento, setHayMovimiento] = useState(false);
+
+  useEffect(() => {
+    setHayMovimiento(!window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
   // Autoplay sólo si no se pidió menos movimiento. Si el navegador lo rechaza
   // (algunas políticas de ahorro de batería), el botón queda en "Reproducir".
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || !esVideo) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     v.play().then(
       () => setPlaying(true),
@@ -49,7 +64,7 @@ export function Hero({ t }: { t: Dictionary }) {
   useEffect(() => {
     const v = videoRef.current;
     const el = section.current;
-    if (!v || !el) return;
+    if (!v || !el || !esVideo) return;
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -133,7 +148,14 @@ export function Hero({ t }: { t: Dictionary }) {
       {/* Escenario fijo */}
       <div className="sticky top-0 z-0 h-[100svh] overflow-hidden">
         <div ref={media} className="absolute inset-0 will-change-transform">
-          {HERO_VIDEO ? (
+          {!esVideo ? (
+            <LogoSting
+              className="h-full w-full"
+              descriptor={t.hero.eyebrow}
+              claim={t.footer.claim}
+              paused={stingPausado}
+            />
+          ) : (
             /* El elemento mide exactamente la banda del video (16:9), no todo
                el contenedor: así la máscara puede fundir el canto superior e
                inferior con el negro de la página. En un teléfono vertical, sin
@@ -156,11 +178,9 @@ export function Hero({ t }: { t: Dictionary }) {
                 aria-label="MOVA — AI Creative Studio"
               >
                 <source src="/video/hero.webm" type="video/webm" />
-                <source src={HERO_VIDEO} type="video/mp4" />
+                <source src={HERO_VIDEO ?? undefined} type="video/mp4" />
               </video>
             </div>
-          ) : (
-            <div className="h-full w-full" />
           )}
         </div>
 
@@ -184,14 +204,21 @@ export function Hero({ t }: { t: Dictionary }) {
           </span>
         </div>
 
-        {HERO_VIDEO && (
-          <div
-            ref={controls}
-            className="absolute right-5 bottom-10 flex items-center gap-5 sm:right-8 lg:right-12"
+        {/* WCAG 2.2.2: cualquier cosa que se mueva sola más de 5s tiene que
+            poder detenerse. Vale para el video y también para el isologo. */}
+        <div
+          ref={controls}
+          hidden={!esVideo && !hayMovimiento}
+          className="absolute right-5 bottom-10 flex items-center gap-5 sm:right-8 lg:right-12"
+        >
+          <button
+            type="button"
+            onClick={esVideo ? togglePlay : () => setStingPausado((v) => !v)}
+            className={boton}
           >
-            <button type="button" onClick={togglePlay} className={boton}>
-              {playing ? t.hero.pause : t.hero.play}
-            </button>
+            {(esVideo ? playing : !stingPausado) ? t.hero.pause : t.hero.play}
+          </button>
+          {esVideo && (
             <button
               type="button"
               onClick={toggleSound}
@@ -200,8 +227,8 @@ export function Hero({ t }: { t: Dictionary }) {
             >
               {muted ? t.hero.soundOn : t.hero.soundOff}
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* La frase entra montada sobre el escenario, una pantalla más abajo.

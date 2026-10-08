@@ -35,7 +35,37 @@ export function isLocale(value: string): value is Locale {
 }
 
 /**
- * El video de recepción: lo que se ve dentro del eclipse al entrar y lo que
+ * Cómo se resuelve la recepción.
+ *
+ *   "render" — el isologo dibujado en vectores (primitives/LogoSting.tsx).
+ *              Nítido a cualquier densidad, ~0 KB extra, y el descriptor y el
+ *              claim son texto real que indexa Google.
+ *   "video"  — el isologo animado que mandó el cliente. Es 1280×720, así que
+ *              en una pantalla retina el hero lo escala 2,25× y se ablanda.
+ *              Si algún día llega un master a 2560 o 3840, vuelve a convenir.
+ */
+export const HERO_MODE: "render" | "video" = "render";
+
+/**
+ * Recepción en video — hoy APAGADA (`HERO_MODE = "render"`).
+ *
+ * El master del cliente vive en `media/mova-logo-sting-source.mp4` y NO se
+ * sirve: es 1280×720 y el hero lo pintaba a 2880 px físicos, así que se veía
+ * blando. Los derivados se borraron del bundle.
+ *
+ * Para volver al video —o para usar un master nuevo en 2560/3840— regenerá
+ * los archivos y volvé a apuntar estas constantes:
+ *
+ *   ffmpeg -i media/<master>.mp4 -c:v libx264 -crf 25 -preset slow \
+ *     -c:a aac -b:a 96k -movflags +faststart public/video/hero.mp4
+ *   ffmpeg -i media/<master>.mp4 -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 \
+ *     -c:a libopus -b:a 80k public/video/hero.webm
+ *   ffmpeg -ss 6 -i media/<master>.mp4 -vframes 1 -q:v 3 public/img/hero-poster.jpg
+ *
+ * Después: HERO_VIDEO = "/video/hero.mp4", HERO_POSTER = "/img/hero-poster.jpg"
+ * y HERO_MODE = "video".
+ *
+ * Original: lo que se ve dentro del eclipse al entrar y lo que
  * ocupa la pantalla cuando el obturador se abre.
  *
  * ⚠️ HOY HAY UN PLACEHOLDER generado con ffmpeg (luz a la deriva sobre negro,
@@ -49,7 +79,5 @@ export function isLocale(value: string): value is Locale {
  * Conviene que el reel sea más oscuro que claro y sin texto quemado: encima
  * van el isologo y, más abajo, el titular.
  */
-export const HERO_VIDEO: string | null = "/video/hero.mp4";
-export const HERO_POSTER: string | null = "/img/hero-poster.jpg";
-/** true mientras el video sea el generado por ffmpeg y no el del cliente. */
-export const HERO_VIDEO_IS_PLACEHOLDER = true;
+export const HERO_VIDEO: string | null = null;
+export const HERO_POSTER: string | null = null;

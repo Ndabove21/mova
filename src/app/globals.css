@@ -291,3 +291,23 @@ html.lenis body {
     animation: none;
   }
 }
+
+/* — Reflejo del isologo (ver primitives/LogoSting.tsx) —
+   Transform de CSS sobre un elemento SVG: las unidades son las del viewBox,
+   y el navegador lo compone en la GPU sin tocar el layout. */
+.sting-sweep {
+  animation: stingSweep 5.4s cubic-bezier(0.55, 0, 0.45, 1) infinite;
+}
+.sting-sweep.is-paused {
+  animation-play-state: paused;
+}
+
+@keyframes stingSweep {
+  0%   { transform: translateX(0); }
+  62%  { transform: translateX(1260px); }
+  100% { transform: translateX(1260px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sting-sweep { animation: none; opacity: 0; }
+}
