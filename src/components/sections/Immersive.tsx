@@ -33,22 +33,6 @@ radial-gradient(31% 35% at 30% 69%, #000 24%, transparent 80%)`;
  * Canto de luz dorada que orbita el objeto. Oro sólo en dos arcos y
  * transparente el resto del recorrido: una luz que rodea, no un aro de color.
  */
-const ANILLO = `conic-gradient(
-  from 140deg,
-  rgba(216,178,122,0) 0deg,
-  rgba(216,178,122,0.10) 44deg,
-  rgba(246,221,184,0.72) 104deg,
-  rgba(216,178,122,0.30) 152deg,
-  rgba(216,178,122,0) 208deg,
-  rgba(216,178,122,0) 296deg,
-  rgba(216,178,122,0.24) 338deg,
-  rgba(216,178,122,0) 360deg
-)`;
-
-/** 1px real: el filete se recorta contra el borde exterior, no se dibuja dentro. */
-const MASCARA_ANILLO =
-  "radial-gradient(closest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px))";
-
 type Capa = {
   /** Caja de la capa dentro del cuadrado. */
   caja: string;
@@ -284,16 +268,41 @@ export function Immersive({ t }: { t: Dictionary }) {
                 />
               ))}
 
-              {/* Canto de luz en órbita, por encima de todo. */}
-              <div
+              {/* Canto de luz en órbita, por encima de todo.
+                  Va como TRAZO SVG y no como degradé cónico recortado con una
+                  máscara radial: pedirle a un `radial-gradient` un corte de
+                  1,5 px sobre un elemento de cientos de píxeles es una
+                  transición de menos de medio por ciento, y hay motores que la
+                  rasterizan mal o ignoran la máscara entera. Cuando eso pasa
+                  no se degrada: aparece el degradé completo como una mancha.
+                  `non-scaling-stroke` mantiene el filete en 1 px de pantalla
+                  sea cual sea el tamaño del contenedor. */}
+              <svg
                 aria-hidden="true"
-                className="animate-rim pointer-events-none absolute inset-[3%] rounded-full"
-                style={{
-                  background: ANILLO,
-                  WebkitMask: MASCARA_ANILLO,
-                  mask: MASCARA_ANILLO,
-                }}
-              />
+                viewBox="0 0 100 100"
+                className="animate-rim pointer-events-none absolute inset-[3%]"
+                fill="none"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <linearGradient id="immersive-rim" x1="0.12" y1="0.9" x2="0.9" y2="0.1">
+                    <stop offset="0%" stopColor="#d8b27a" stopOpacity="0" />
+                    <stop offset="26%" stopColor="#f6ddb8" stopOpacity="0.72" />
+                    <stop offset="46%" stopColor="#d8b27a" stopOpacity="0.3" />
+                    <stop offset="72%" stopColor="#d8b27a" stopOpacity="0" />
+                    <stop offset="92%" stopColor="#d8b27a" stopOpacity="0.24" />
+                    <stop offset="100%" stopColor="#d8b27a" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="49.6"
+                  stroke="url(#immersive-rim)"
+                  strokeWidth="1"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
             </div>
           </figure>
 

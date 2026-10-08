@@ -74,6 +74,23 @@ piezas y ajustar a ojo:
 
 Para regenerar el lockup plano desde las letras, ver `media/LEEME.md`.
 
+### Los cantos de luz van en SVG, no en máscaras
+
+El anillo del eclipse y el filete en órbita de la sección 05 se dibujan como
+**trazo SVG con `vector-effect="non-scaling-stroke"`**, no como un degradé
+cónico recortado con una máscara radial.
+
+El motivo es un bug real que apareció en producción: pedirle a un
+`radial-gradient` un corte de 3 px sobre un elemento de 2300 px es una
+transición del 99,87% al 99,89%. Hay motores que la rasterizan con poca
+precisión —o que ignoran la máscara entera— y entonces el efecto no se degrada:
+queda a la vista el sector brillante del degradé completo, o sea **una cuña
+dorada enorme** en lugar de un filo.
+
+Con el trazo SVG el grosor se mide en píxeles de pantalla sin importar cuánto
+se escale el dibujo, así que el canto es exacto en cualquier navegador y a
+cualquier tamaño.
+
 ### El fondo: metal fundido
 
 `MoltenMetal.tsx` es un fragment shader de WebGL2 —sin three.js, que serían
