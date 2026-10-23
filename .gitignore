@@ -37,3 +37,6 @@ next-env.d.ts
 # Masters de video del cliente: pesan decenas de MB y no se sirven. Los
 # derivados optimizados sí están versionados, en public/.
 media/*.mov
+
+# Masters de cliente sueltos en public/: si cae uno, no se versiona crudo.
+public/videos/clientes/
