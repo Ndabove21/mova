@@ -2,10 +2,12 @@
  * Configuración única del sitio.
  *
  * ⚠️ PENDIENTE DE CLIENTE — reemplazar antes de publicar todo lo marcado
- * TODO_CLIENTE: WhatsApp, mail, redes y dominio.
+ * TODO_CLIENTE: WhatsApp, mail y redes. El dominio ya está confirmado:
+ * mova.valisconsulting.com (es un subdominio de valisconsulting.com, no un
+ * dominio propio — si eso cambia, actualizar acá).
  */
 
-export const SITE_URL = "https://mova.studio"; // TODO_CLIENTE: dominio definitivo
+export const SITE_URL = "https://mova.valisconsulting.com"; // dominio real, confirmado
 
 export const CONTACT = {
   /** TODO_CLIENTE: número real, formato internacional, sin + ni espacios */
